@@ -146,17 +146,17 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
   // <p>some text</p>`);
   // });
   // SEND RESPONSE
-  res.sendFile(
-    path.join(__dirname, 'public', `img/projects${projects[0].imageCover}`)
-  );
+  // res.sendFile(
+  //   path.join(__dirname, 'public', `img/projects${projects[0].imageCover}`)
+  // );
 
-  // res.status(200).json({
-  //   status: 'success',
-  //   results: projects.length,
-  //   data: {
-  //     readStream
-  //   }
-  // });
+  res.status(200).json({
+    status: 'success',
+    results: projects.length,
+    data: {
+      projects
+    }
+  });
 });
 
 exports.getProject = catchAsync(async (req, res, next) => {
@@ -174,33 +174,32 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  // console.log(req.body);
-  // let imagesOfUnits = [];
-  // let prev = 0;
-  // JSON.parse(req.body.unitImagesNum).map((num, index) => {
-  //   console.log(index);
-  //   for (let i = prev; i < prev + num; i++) {
-  //     imagesOfUnits.push({ image: req.body.housingUnitsimages[i], index });
-  //   }
-  //   prev = num;
-  // });
-  // console.log(imagesOfUnits);
-  // let units = req.body.unitsCover.map((item, index) => {
-  //   return {
-  //     name: index,
-  //     imageCover: item,
-  //     images: []
-  //   };
-  // });
-  // let images, images1;
-  // for (let i = 0; i < req.body.imageCover.length; i++) {
-  //   images = imagesOfUnits.filter(item => {
-  //     if (item.index == i) {
-  //       units[i].images.push(item.image);
-  //     }
-  //   });
-
-  // }
+  console.log(req.body);
+  let imagesOfUnits = [];
+  let prev = 0;
+  JSON.parse(req.body.unitImagesNum).map((num, index) => {
+    console.log(index);
+    for (let i = prev; i < prev + num; i++) {
+      imagesOfUnits.push({ image: req.body.housingUnitsimages[i], index });
+    }
+    prev = num;
+  });
+  console.log(imagesOfUnits);
+  let units = req.body.unitsCover.map((item, index) => {
+    return {
+      name: index,
+      imageCover: item,
+      images: []
+    };
+  });
+  let images, images1;
+  for (let i = 0; i < req.body.imageCover.length; i++) {
+    images = imagesOfUnits.filter(item => {
+      if (item.index == i) {
+        units[i].images.push(item.image);
+      }
+    });
+  }
 
   console.log('-----------------------------');
   console.log(req.files.unitImages);
