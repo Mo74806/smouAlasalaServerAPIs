@@ -86,7 +86,8 @@ exports.restrictTo = (...roles) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
-  let token = req.headers?.jwt;
+  //let token = req.headers?.jwt;
+  let token = req.body?.jwt;
   // console.log(token.jwt);
   // console.log(req.headers);
   // if (
