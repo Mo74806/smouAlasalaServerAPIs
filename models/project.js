@@ -12,23 +12,28 @@ const projectSchema = new mongoose.Schema(
     videos: { type: [String] },
     description: {
       type: String,
-      // require: [true, 'A project Must Have  a Description'],
+      require: [true, 'A project Must Have  a Description'],
       minlength: [20, 'project description is too small']
     },
     imageCover: {
-      type: String
-      // require: [true, 'A project Must Have  a cover image']
+      type: String,
+      require: [true, 'A project Must Have  a cover image']
     },
     images: {
-      type: [String]
-      // require: [true, 'A project Must Have  a images']
+      type: [String],
+      require: [true, 'A project Must Have  a images']
     },
     housingUnits: [
-      { imageCover: { type: String }, images: [String], name: String }
+      {
+        imageCover: { type: String },
+        images: [String],
+        name: { type: String },
+        description: { type: String }
+      }
     ],
     establishDate: {
-      type: Date
-      // require: [true, 'establishing date is required']
+      type: Date,
+      require: [true, 'establishing date is required']
     }
   },
   {

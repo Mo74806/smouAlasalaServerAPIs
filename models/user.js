@@ -8,14 +8,20 @@ const catchAsync = require('../utils/catchAsync');
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
+    minlength: 2,
+
     required: [true, 'Please tell us your name!']
   },
   lastName: {
     type: String,
+    minlength: 2,
+
     required: [true, 'Please tell us your name!']
   },
   userName: {
     type: String,
+    minlength: 4,
+
     unique: true,
     lowercase: true,
     required: [true, 'Please tell us your useName!']
@@ -27,7 +33,6 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email']
   },
-  photo: String,
   role: {
     type: String,
     enum: ['user', 'admin'],

@@ -7,10 +7,13 @@ const appointementSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      unique: true,
       ref: 'user'
     },
-    startDate: { type: String, unique: true },
+    startDate: {
+      type: String,
+      unique: true,
+      require: [true, 'please Select appointement Date']
+    },
     endDate: { type: String },
     confirm: { type: Boolean, default: false }
   },

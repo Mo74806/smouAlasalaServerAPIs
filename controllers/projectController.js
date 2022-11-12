@@ -5,6 +5,7 @@ const AppError = require('./../utils/appError');
 const multer = require('multer');
 const sharp = require('sharp');
 const fs = require('fs');
+const path = require('path');
 
 const multerStorage = multer.memoryStorage();
 
@@ -94,14 +95,6 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
     })
   );
 
-  // await sharp(req.files.housingUnitsimageCover[0][0].buffer)
-  //   .resize(700, 450)
-  //   .toFormat('jpeg')
-  //   .jpeg({ quality: 90 })
-  //   .toFile(`public/img/projects/housingUnits/${req.body.imageCover}`);
-  console.log('-----------------');
-
-  console.log(req.files.housingUnitsimages);
   req.body.housingUnitsimages = [];
   await Promise.all(
     req.files.unitImages.map(async (file, i) => {
@@ -114,8 +107,7 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
       req.body.housingUnitsimages.push(filename);
     })
   );
-  // console.log('ggyyyyyyyyyyyyy');
-  // console.log(req.body.housingUnitsimages);
+
   next();
 });
 
@@ -134,21 +126,6 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   const projects = await features.query;
-  const readStream = fs.createReadStream(`/${projects[0].imageCover}`);
-
-  //   res.send(`
-  // <link rel="stylesheet" type="text/css"
-  //   href="css/style.css">
-  // <h1>Welome</h1>
-  // <img
-  // src="/images/misc/${projects[0].imageCover}"
-  // style="height:300px;"/>
-  // <p>some text</p>`);
-  // });
-  // SEND RESPONSE
-  // res.sendFile(
-  //   path.join(__dirname, 'public', `img/projects${projects[0].imageCover}`)
-  // );
 
   res.status(200).json({
     status: 'success',
@@ -161,6 +138,18 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 
 exports.getProject = catchAsync(async (req, res, next) => {
   const project = await Project.findById(req.params.id);
+  res.sendFile(
+    path.join(
+      __dirname,
+      `../public/img/projects/0-unitCover-undefined-1668223436394-1.jpeg`
+    )
+  );
+
+  // const pathname = path.join(
+  //   __dirname,
+  //   `../public/img/projects/0-unitCover-undefined-1668223436394-1.jpeg`
+  // );
+  // res.sendFile(pathname);
 
   if (!project) {
     return next(new AppError('no Project matched this id', 404));
@@ -187,6 +176,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
   console.log(imagesOfUnits);
   let units = req.body.unitsCover.map((item, index) => {
     return {
+      name: req.body.housingUnits[index].name,
+      description: req.body.housingUnits[index].description,
       name: index,
       imageCover: item,
       images: []
@@ -201,11 +192,9 @@ exports.createProject = catchAsync(async (req, res, next) => {
     });
   }
 
-  console.log('-----------------------------');
-  console.log(req.files.unitImages);
   const newProject = await Project.create({
-    ...req.body
-    // housingUnits: units
+    ...req.body,
+    housingUnits: units
   });
   console.log(newProject);
   res.status(201).json({

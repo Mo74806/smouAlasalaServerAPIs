@@ -13,11 +13,15 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const cros = require('cors');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 app.options('*', cros()); // include before other routes
 var path = require('path');
+app.use(express.static('public'));
+app.use(express.static('files'));
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 // 1) MIDDLEWARES
 app.use(helmet());
 let limiter = rateLimit({
@@ -31,6 +35,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
@@ -47,6 +52,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/appointements', appointementRouter);
 app.use('/api/v1/contacts', contactRouter);
+app.use('/static', express.static(path.join(__dirname, 'public')));
+
 // app.use(
 //   `/img/project`,
 //   express.static(path.join(path.resolve(__dirname, ''), 'img/projects'))
