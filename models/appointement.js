@@ -12,7 +12,7 @@ const appointementSchema = new mongoose.Schema(
     },
     startDate: { type: String, unique: true },
     endDate: { type: String },
-    confirm: { type: boolen, default: false }
+    confirm: { type: Boolean, default: false }
   },
   {
     toJSON: { virtuals: true },
