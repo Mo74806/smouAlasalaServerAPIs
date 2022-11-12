@@ -73,47 +73,47 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
   );
   // //3)housingUnitCoverImage
 
-  // req.body.housingUnitsimageCover = `projects-${
-  //   req.params.id
-  // }-${Date.now()}-cover.jpeg`;
-  //3
-  // req.body.unitsCover = [];
-  // // console.log(unitCover);
-  // await Promise.all(
-  //   req.files.unitCover.map(async (file, i) => {
-  //     const filename = `${i}-unitCover-${req.params.id}-${Date.now()}-${i +
-  //       1}.jpeg`;
+  req.body.housingUnitsimageCover = `projects-${
+    req.params.id
+  }-${Date.now()}-cover.jpeg`;
+  3;
+  req.body.unitsCover = [];
+  // console.log(unitCover);
+  await Promise.all(
+    req.files.unitCover.map(async (file, i) => {
+      const filename = `${i}-unitCover-${req.params.id}-${Date.now()}-${i +
+        1}.jpeg`;
 
-  //     await sharp(file.buffer)
-  //       .resize(700, 450)
-  //       .toFormat('jpeg')
-  //       .jpeg({ quality: 90 })
-  //       .toFile(`public/img/projects/${filename}`);
+      await sharp(file.buffer)
+        .resize(700, 450)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/projects/${filename}`);
 
-  //     req.body.unitsCover.push(filename);
-  //   })
-  // );
+      req.body.unitsCover.push(filename);
+    })
+  );
 
-  // await sharp(req.files.housingUnitsimageCover[0][0].buffer)
-  //   .resize(700, 450)
-  //   .toFormat('jpeg')
-  //   .jpeg({ quality: 90 })
-  //   .toFile(`public/img/projects/housingUnits/${req.body.imageCover}`);
-  // console.log('-----------------');
+  await sharp(req.files.housingUnitsimageCover[0][0].buffer)
+    .resize(700, 450)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/projects/housingUnits/${req.body.imageCover}`);
+  console.log('-----------------');
 
-  // console.log(req.files.housingUnitsimages);
-  // req.body.housingUnitsimages = [];
-  // await Promise.all(
-  //   req.files.unitImages.map(async (file, i) => {
-  //     const filename = `${i}-project-${req.params.id}-${Date.now()}.jpeg`;
-  //     await sharp(file.buffer)
-  //       .resize(700, 450)
-  //       .toFormat('jpeg')
-  //       .jpeg({ quality: 90 })
-  //       .toFile(`public/img/projects/housingUnits/${filename}`);
-  //     req.body.housingUnitsimages.push(filename);
-  //   })
-  // );
+  console.log(req.files.housingUnitsimages);
+  req.body.housingUnitsimages = [];
+  await Promise.all(
+    req.files.unitImages.map(async (file, i) => {
+      const filename = `${i}-project-${req.params.id}-${Date.now()}.jpeg`;
+      await sharp(file.buffer)
+        .resize(700, 450)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/projects/housingUnits/${filename}`);
+      req.body.housingUnitsimages.push(filename);
+    })
+  );
   // console.log('ggyyyyyyyyyyyyy');
   // console.log(req.body.housingUnitsimages);
   next();
