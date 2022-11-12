@@ -11,7 +11,7 @@ const projectSchema = new mongoose.Schema(
     },
     videos: { type: [String] },
     description: {
-      type: [String],
+      type: String,
       // require: [true, 'A project Must Have  a Description'],
       minlength: [20, 'project description is too small']
     },
