@@ -120,6 +120,7 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
 
 exports.getAllProjects = catchAsync(async (req, res, next) => {
   // EXECUTE QUERY
+
   const features = new APIFeatures(Project.find(), req.query)
     .filter()
     .sort()

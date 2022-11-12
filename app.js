@@ -16,7 +16,11 @@ const cros = require('cors');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-app.options('*', cros()); // include before other routes
+app.use(
+  cros({
+    origin: '*'
+  })
+);
 var path = require('path');
 app.use(express.static('public'));
 app.use(express.static('files'));
