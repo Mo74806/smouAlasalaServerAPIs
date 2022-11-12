@@ -4,6 +4,7 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const multer = require('multer');
 const sharp = require('sharp');
+const fs = require('fs');
 
 const multerStorage = multer.memoryStorage();
 
@@ -133,24 +134,30 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   const projects = await features.query;
+  const readStream = fs.createReadStream(`/${projects[0].imageCover}`);
 
-  res.send(`
-<link rel="stylesheet" type="text/css"
-  href="css/style.css">
-<h1>Welome</h1>
-<img
-src="/images/misc/${projects[0].imageCover}"
-style="height:300px;"/>
-<p>some text</p>`);
+  //   res.send(`
+  // <link rel="stylesheet" type="text/css"
+  //   href="css/style.css">
+  // <h1>Welome</h1>
+  // <img
+  // src="/images/misc/${projects[0].imageCover}"
+  // style="height:300px;"/>
+  // <p>some text</p>`);
+  // });
+  // SEND RESPONSE
+  res.sendFile(
+    path.join(__dirname, 'public', `img/projects${projects[0].imageCover}`)
+  );
+
+  // res.status(200).json({
+  //   status: 'success',
+  //   results: projects.length,
+  //   data: {
+  //     readStream
+  //   }
+  // });
 });
-// SEND RESPONSE
-// res.status(200).json({
-//   status: 'success',
-//   results: projects.length,
-//   data: {
-//     projects
-//   }
-// });
 
 exports.getProject = catchAsync(async (req, res, next) => {
   const project = await Project.findById(req.params.id);

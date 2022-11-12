@@ -17,6 +17,8 @@ router
   .get(authController.protect, appointementController.getAppointement)
   .patch(authController.protect, appointementController.updateAppointement)
   .delete(authController.protect, appointementController.deleteAppointement);
+  .patch(authController.protect, appointementController.setAppointementConfirmed)
+
 router
   .route('/free/:date')
   .get(

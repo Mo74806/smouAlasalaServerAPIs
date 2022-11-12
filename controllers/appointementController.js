@@ -65,6 +65,27 @@ exports.updateAppointement = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+exports.setAppointementConfirmed = catchAsync(async (req, res, next) => {
+  const appointement = await Appointement.findByIdAndUpdate(
+    req.params.id,
+    { confirm: true },
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+  if (!appointement)
+    return next(new AppError('no Appointement matched this id', 404));
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      appointement
+    }
+  });
+});
+
 exports.deleteAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findByIdAndDelete(req.params.id);
   console.log(appointement);

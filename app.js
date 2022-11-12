@@ -17,8 +17,7 @@ const app = express();
 app.options('*', cros()); // include before other routes
 var path = require('path');
 
-app.use(express.static(path.resolve('./public')));
-app.use(cros());
+app.use(express.static(path.join(__dirname, 'public')));
 // 1) MIDDLEWARES
 app.use(helmet());
 let limiter = rateLimit({
@@ -48,6 +47,10 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/appointements', appointementRouter);
 app.use('/api/v1/contacts', contactRouter);
+// app.use(
+//   `/img/project`,
+//   express.static(path.join(path.resolve(__dirname, ''), 'img/projects'))
+// );
 
 app.all('*', (req, res, next) => {
   next(new AppError(`coldn\'t make request to this url ${req.url} `, 404));

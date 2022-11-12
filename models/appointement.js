@@ -11,7 +11,8 @@ const appointementSchema = new mongoose.Schema(
       ref: 'user'
     },
     startDate: { type: String, unique: true },
-    endDate: { type: String }
+    endDate: { type: String },
+    confirm: { type: boolen, default: false }
   },
   {
     toJSON: { virtuals: true },
