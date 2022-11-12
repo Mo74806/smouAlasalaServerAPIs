@@ -25,7 +25,7 @@ const upload = multer({
 
 exports.uploadProjectImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 },
+  { name: 'images', maxCount: 5 },
   {
     name: 'unitCover',
     maxCount: 100
@@ -94,11 +94,11 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
     })
   );
 
-  await sharp(req.files.housingUnitsimageCover[0][0].buffer)
-    .resize(700, 450)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/projects/housingUnits/${req.body.imageCover}`);
+  // await sharp(req.files.housingUnitsimageCover[0][0].buffer)
+  //   .resize(700, 450)
+  //   .toFormat('jpeg')
+  //   .jpeg({ quality: 90 })
+  //   .toFile(`public/img/projects/housingUnits/${req.body.imageCover}`);
   console.log('-----------------');
 
   console.log(req.files.housingUnitsimages);
