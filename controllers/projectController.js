@@ -207,8 +207,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
   console.log(req.body.housingUnits);
   let units = req.body.unitsCover.map((item, index) => {
     return {
-      name: req.body.housingUnits[index].name,
-      description: req.body.housingUnits[index].description,
+      name: req.body.unitName[index],
+      description: req.body.unitDescription[index],
       imageCover: item
     };
   });
