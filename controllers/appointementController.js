@@ -34,7 +34,8 @@ exports.getAppointement = catchAsync(async (req, res, next) => {
   });
 });
 exports.createAppointement = catchAsync(async (req, res, next) => {
-  // console.log(req.body);
+  console.log(req.body);
+  console.log(req.user.id);
   const newAppointement = await Appointement.create({
     ...req.body,
     user: req.user.id

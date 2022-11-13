@@ -209,13 +209,15 @@ exports.createProject = catchAsync(async (req, res, next) => {
   // });
   // console.log(imagesOfUnits);
   console.log(req.body.housingUnits);
-  let units = req.body.unitsCover.map((item, index) => {
-    return {
-      name: req.body.unitName[index],
-      description: req.body.unitDescription[index],
-      imageCover: item
-    };
-  });
+  if (req.body.unitCover) {
+    let units = req.body.unitsCover.map((item, index) => {
+      return {
+        name: req.body.unitName[index],
+        description: req.body.unitDescription[index],
+        imageCover: item
+      };
+    });
+  }
   // let images, images1;
   // for (let i = 0; i < req.body.imageCover.length; i++) {
   //   images = imagesOfUnits.filter(item => {

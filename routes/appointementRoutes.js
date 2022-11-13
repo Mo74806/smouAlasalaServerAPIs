@@ -6,8 +6,8 @@ const router = express.Router();
 router
   .route('/')
   .get(
-    authController.protect,
-    authController.restrictTo('admin'),
+    // authController.protect,
+    // authController.restrictTo('admin'),
     appointementController.getAllAppointements
   )
   .post(authController.protect, appointementController.createAppointement);
