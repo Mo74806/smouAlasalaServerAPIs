@@ -22,6 +22,8 @@ router
   .patch(
     // authController.protect,
     // authController.restrictTo('admin'),
+    projectController.uploadProjectImages,
+    projectController.resizeProjectImages,
     projectController.updateProject
   )
   .delete(

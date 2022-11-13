@@ -22,8 +22,8 @@ app.use(
   })
 );
 var path = require('path');
-app.use(express.static('public'));
 app.use(express.static('files'));
+app.use(express.static('public/img/projects'));
 
 // app.use(express.static(path.join(__dirname, 'public')));
 // 1) MIDDLEWARES

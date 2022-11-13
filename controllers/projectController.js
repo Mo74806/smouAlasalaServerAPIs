@@ -56,71 +56,75 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
   //   .toFormat('jpeg')
   //   .jpeg({ quality: 90 })
   //   .toFile(`public/img/projects/${req.body.imageCover}`);
+  if (req.files.imageCover) {
+    req.body.imageCover = [];
+    await Promise.all(
+      req.files.imageCover.map(async (file, i) => {
+        const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
-  req.body.imageCover = [];
-  await Promise.all(
-    req.files.imageCover.map(async (file, i) => {
-      const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(700, 450)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/projects/${filename}`);
 
-      await sharp(file.buffer)
-        .resize(700, 450)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/projects/${filename}`);
-
-      req.body.imageCover.push(filename);
-    })
-  );
-
+        req.body.imageCover.push(filename);
+      })
+    );
+  }
   // 2) Images
-  req.body.imageService = [];
-  await Promise.all(
-    req.files.imageService.map(async (file, i) => {
-      const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-      await sharp(file.buffer)
-        .resize(700, 450)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/projects/${filename}`);
-      req.body.imageService.push(filename);
-    })
-  );
+  if (req.files.imageService) {
+    req.body.imageService = [];
+    await Promise.all(
+      req.files.imageService.map(async (file, i) => {
+        const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(700, 450)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/projects/${filename}`);
+        req.body.imageService.push(filename);
+      })
+    );
+  }
+  if (req.files.imagePlan) {
+    req.body.imagePlan = [];
+    await Promise.all(
+      req.files.imagePlan.map(async (file, i) => {
+        const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(700, 450)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/projects/${filename}`);
 
-  req.body.imagePlan = [];
-  await Promise.all(
-    req.files.imagePlan.map(async (file, i) => {
-      const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-      await sharp(file.buffer)
-        .resize(700, 450)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/projects/${filename}`);
-
-      req.body.imagePlan.push(filename);
-    })
-  );
+        req.body.imagePlan.push(filename);
+      })
+    );
+  }
   // //3)housingUnitCoverImage
 
   // req.body.housingUnitsimageCover = `projects-${
   //   req.params.id
   // }-${Date.now()}-cover.jpeg`;
+  if (req.files.unitCover) {
+    req.body.unitsCover = [];
+    // console.log(unitCover);
+    await Promise.all(
+      req.files.unitCover.map(async (file, i) => {
+        const filename = `${i}-unitCover-${req.params.id}-${Date.now()}-${i +
+          1}.jpeg`;
 
-  req.body.unitsCover = [];
-  // console.log(unitCover);
-  await Promise.all(
-    req.files.unitCover.map(async (file, i) => {
-      const filename = `${i}-unitCover-${req.params.id}-${Date.now()}-${i +
-        1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(700, 450)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/projects/${filename}`);
 
-      await sharp(file.buffer)
-        .resize(700, 450)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/projects/${filename}`);
-
-      req.body.unitsCover.push(filename);
-    })
-  );
+        req.body.unitsCover.push(filename);
+      })
+    );
+  }
   console.log('------------------------');
   console.log(req.body.unitsCover);
   console.log('----------------------');
@@ -235,10 +239,55 @@ exports.createProject = catchAsync(async (req, res, next) => {
 });
 
 exports.updateProject = catchAsync(async (req, res, next) => {
-  const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  let units = [];
+
+  const project1 = await Project.findById(req.params.id);
+
+  // {
+  //   units = project1.housingUnits.map((item, index) => {
+  //     // if (index.includes(req.body.edit))
+  //     if (index == 1) {
+  //       return {
+  //         imageCover: req.body.unitCover
+  //       };
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  // }
+
+  // {
+  //   units = project1.housingUnits.map((item, index) => {
+  //     return {
+  //       name: req.body.unitName[index]
+  //     };
+  //   });
+  // }
+
+  // {
+  //   units = project1.housingUnits.map((item, index) => {
+  //     return {
+  //       description: req.body.unitDescription[index]
+  //     };
+  //   });
+  // }
+
+  console.log(req);
+  const project = await Project.findByIdAndUpdate(
+    req.params.id,
+
+    {
+      ...req.body,
+      imageCover: [...project1.imageCover, ...req.body.imageCover],
+      imagePlan: [...project1.imagePlan, ...req.body.imagePlan],
+      imageService: [...project1.imageService, ...req.body.imageService]
+    },
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+
   if (!project) return next(new AppError('no project matched this id', 404));
 
   res.status(200).json({
