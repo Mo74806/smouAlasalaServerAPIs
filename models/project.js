@@ -9,24 +9,31 @@ const projectSchema = new mongoose.Schema(
       require: [true, 'A project Must Have  a Name'],
       minlength: [3, 'A project Name must be larger than 3 Charcter']
     },
-    videos: { type: [String] },
+    videos: { type: String },
     description: {
       type: String,
       require: [true, 'A project Must Have  a Description'],
       minlength: [20, 'project description is too small']
     },
     imageCover: {
-      type: String,
+      type: [String],
       require: [true, 'A project Must Have  a cover image']
     },
     images: {
       type: [String],
       require: [true, 'A project Must Have  a images']
     },
+    imagePlan: {
+      type: [String],
+      require: [true, 'A project Must Have  a images']
+    },
+    imageService: {
+      type: [String],
+      require: [true, 'A project Must Have  a images']
+    },
     housingUnits: [
       {
         imageCover: { type: String },
-        images: [String],
         name: { type: String },
         description: { type: String }
       }

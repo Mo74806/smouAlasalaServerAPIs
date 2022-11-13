@@ -25,20 +25,20 @@ const upload = multer({
 });
 
 exports.uploadProjectImages = upload.fields([
-  { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 5 },
+  { name: 'imageCover', maxCount: 10 },
+  { name: 'imageService', maxCount: 15 },
   {
     name: 'unitCover',
-    maxCount: 100
+    maxCount: 10
   },
-  { name: 'unitImages', maxCount: 200 }
+  { name: 'imagePlan', maxCount: 15 }
 ]);
 
 // upload.single('image') req.file
 // upload.array('images', 5) req.files
 
 exports.resizeProjectImages = catchAsync(async (req, res, next) => {
-  console.log(req.files.imageCover);
+  // console.log(req.files.imageCover);
 
   // if (
   //   !req.files.imageCover ||
@@ -49,18 +49,17 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
   //   return next();
 
   // 1) Cover image
-  console.log(req.body);
-  req.body.imageCover = `projects-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
-    .resize(700, 450)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/projects/${req.body.imageCover}`);
+  // console.log(req.body);
+  // req.body.imageCover = `projects-${req.params.id}-${Date.now()}-cover.jpeg`;
+  // await sharp(req.files.imageCover[0].buffer)
+  //   .resize(700, 450)
+  //   .toFormat('jpeg')
+  //   .jpeg({ quality: 90 })
+  //   .toFile(`public/img/projects/${req.body.imageCover}`);
 
-  // 2) Images
-  req.body.images = [];
+  req.body.imageCover = [];
   await Promise.all(
-    req.files.images.map(async (file, i) => {
+    req.files.imageCover.map(async (file, i) => {
       const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
       await sharp(file.buffer)
@@ -69,15 +68,43 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
         .jpeg({ quality: 90 })
         .toFile(`public/img/projects/${filename}`);
 
-      req.body.images.push(filename);
+      req.body.imageCover.push(filename);
+    })
+  );
+
+  // 2) Images
+  req.body.imageService = [];
+  await Promise.all(
+    req.files.imageService.map(async (file, i) => {
+      const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      await sharp(file.buffer)
+        .resize(700, 450)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/projects/${filename}`);
+      req.body.imageService.push(filename);
+    })
+  );
+
+  req.body.imagePlan = [];
+  await Promise.all(
+    req.files.imagePlan.map(async (file, i) => {
+      const filename = `project-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      await sharp(file.buffer)
+        .resize(700, 450)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/projects/${filename}`);
+
+      req.body.imagePlan.push(filename);
     })
   );
   // //3)housingUnitCoverImage
 
-  req.body.housingUnitsimageCover = `projects-${
-    req.params.id
-  }-${Date.now()}-cover.jpeg`;
-  3;
+  // req.body.housingUnitsimageCover = `projects-${
+  //   req.params.id
+  // }-${Date.now()}-cover.jpeg`;
+
   req.body.unitsCover = [];
   // console.log(unitCover);
   await Promise.all(
@@ -94,19 +121,21 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
       req.body.unitsCover.push(filename);
     })
   );
-
-  req.body.housingUnitsimages = [];
-  await Promise.all(
-    req.files.unitImages.map(async (file, i) => {
-      const filename = `${i}-project-${req.params.id}-${Date.now()}.jpeg`;
-      await sharp(file.buffer)
-        .resize(700, 450)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/projects/housingUnits/${filename}`);
-      req.body.housingUnitsimages.push(filename);
-    })
-  );
+  console.log('------------------------');
+  console.log(req.body.unitsCover);
+  console.log('----------------------');
+  // req.body.housingUnitsimages = [];
+  // await Promise.all(
+  //   req.files.unitImages.map(async (file, i) => {
+  //     const filename = `${i}-project-${req.params.id}-${Date.now()}.jpeg`;
+  //     await sharp(file.buffer)
+  //       .resize(700, 450)
+  //       .toFormat('jpeg')
+  //       .jpeg({ quality: 90 })
+  //       .toFile(`public/img/projects/housingUnits/${filename}`);
+  //     req.body.housingUnitsimages.push(filename);
+  //   })
+  // );
 
   next();
 });
@@ -164,34 +193,33 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  let imagesOfUnits = [];
-  let prev = 0;
-  JSON.parse(req.body.unitImagesNum).map((num, index) => {
-    console.log(index);
-    for (let i = prev; i < prev + num; i++) {
-      imagesOfUnits.push({ image: req.body.housingUnitsimages[i], index });
-    }
-    prev = num;
-  });
-  console.log(imagesOfUnits);
+  // console.log(req.body);
+  // let imagesOfUnits = [];
+  // let prev = 0;
+  // JSON.parse(req.body.unitImagesNum).map((num, index) => {
+  //   console.log(index);
+  //   for (let i = prev; i < prev + num; i++) {
+  //     imagesOfUnits.push({ image: req.body.housingUnitsimages[i], index });
+  //   }
+  //   prev = num;
+  // });
+  // console.log(imagesOfUnits);
+  console.log(req.body.housingUnits);
   let units = req.body.unitsCover.map((item, index) => {
     return {
       name: req.body.housingUnits[index].name,
       description: req.body.housingUnits[index].description,
-      name: index,
-      imageCover: item,
-      images: []
+      imageCover: item
     };
   });
-  let images, images1;
-  for (let i = 0; i < req.body.imageCover.length; i++) {
-    images = imagesOfUnits.filter(item => {
-      if (item.index == i) {
-        units[i].images.push(item.image);
-      }
-    });
-  }
+  // let images, images1;
+  // for (let i = 0; i < req.body.imageCover.length; i++) {
+  //   images = imagesOfUnits.filter(item => {
+  //     if (item.index == i) {
+  //       units[i].images.push(item.image);
+  //     }
+  //   });
+  // }
 
   const newProject = await Project.create({
     ...req.body,
