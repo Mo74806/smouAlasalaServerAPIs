@@ -279,9 +279,9 @@ exports.updateProject = catchAsync(async (req, res, next) => {
 
     {
       ...req.body,
-      imageCover: [...project1.imageCover, ...req.body.imageCover],
-      imagePlan: [...project1.imagePlan, ...req.body.imagePlan],
-      imageService: [...project1.imageService, ...req.body.imageService]
+      imageCover: project1.imageCover.append(req.body.imageCover)
+      // imagePlan: [...project1.imagePlan, ...req.body.imagePlan],
+      // imageService: [...project1.imageService, ...req.body.imageService]
     },
     {
       new: true,
