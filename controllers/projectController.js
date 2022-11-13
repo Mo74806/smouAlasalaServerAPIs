@@ -273,15 +273,25 @@ exports.updateProject = catchAsync(async (req, res, next) => {
   //   });
   // }
 
+  if (req.body.imageCover) {
+    req.body.imageCover = [...project1.imageCover, ...req.body.imageCover];
+  }
+  if (req.body.imageService) {
+    req.body.imageService = [
+      ...project1.imageService,
+      ...req.body.imageService
+    ];
+  }
+  if (req.body.imagePlan) {
+    req.body.imagePlan = [...project1.imagePlan, ...req.body.imagePlan];
+  }
+
   console.log(req);
   const project = await Project.findByIdAndUpdate(
     req.params.id,
 
     {
-      ...req.body,
-      imageCover: project1.imageCover.append(req.body.imageCover)
-      // imagePlan: [...project1.imagePlan, ...req.body.imagePlan],
-      // imageService: [...project1.imageService, ...req.body.imageService]
+      ...req.body
     },
     {
       new: true,
