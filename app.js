@@ -58,10 +58,10 @@ app.use('/api/v1/appointements', appointementRouter);
 app.use('/api/v1/contacts', contactRouter);
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-// app.use(
-//   `/img/project`,
-//   express.static(path.join(path.resolve(__dirname, ''), 'img/projects'))
-// );
+app.use(
+  `/img/project`,
+  express.static(path.join(path.resolve(__dirname, ''), 'img/projects'))
+);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`coldn\'t make request to this url ${req.url} `, 404));
