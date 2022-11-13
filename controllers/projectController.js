@@ -228,8 +228,7 @@ exports.createProject = catchAsync(async (req, res, next) => {
   // }
 
   const newProject = await Project.create({
-    ...req.body,
-    housingUnits: units
+    ...req.body
   });
   console.log(newProject);
   res.status(201).json({
