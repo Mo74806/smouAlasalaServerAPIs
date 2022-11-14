@@ -4,6 +4,12 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 router
+  .route('/free/:date')
+  .get(
+    authController.protect,
+    appointementController.getFreeAppointementsInDay
+  );
+router
   .route('/')
   .get(
     // authController.protect,
@@ -14,7 +20,7 @@ router
 
 router
   .route('/:id')
-  .get(authController.protect, appointementController.getAppointement)
+  // .get(authController.protect, appointementController.getAppointement)
   .patch(authController.protect, appointementController.updateAppointement)
   .delete(authController.protect, appointementController.deleteAppointement);
 router
@@ -22,13 +28,6 @@ router
   .patch(
     authController.protect,
     appointementController.setAppointementConfirmed
-  );
-
-router
-  .route('/free/:date')
-  .get(
-    authController.protect,
-    appointementController.getFreeAppointementsInDay
   );
 
 module.exports = router;

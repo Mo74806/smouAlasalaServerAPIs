@@ -89,6 +89,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   let token = req.headers?.jwt;
   // let token = req.params?.jwt;
   // console.log(req.headers);
+  console.log('**********************');
   console.log(token);
   // console.log(req.headers);
   // if (

@@ -34,12 +34,14 @@ exports.getAppointement = catchAsync(async (req, res, next) => {
   });
 });
 exports.createAppointement = catchAsync(async (req, res, next) => {
+  console.log('-----------------------------');
   console.log(req.body);
   console.log(req.user.id);
   const newAppointement = await Appointement.create({
     ...req.body,
     user: req.user.id
   });
+  console.log(newAppointement);
   res.status(201).json({
     status: 'success',
     data: {
@@ -47,6 +49,7 @@ exports.createAppointement = catchAsync(async (req, res, next) => {
     }
   });
 });
+
 exports.updateAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findByIdAndUpdate(
     req.params.id,
@@ -124,14 +127,25 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
       data: null
     });
   }
+  // console.log('pppppppppp----------------ppppppppppppp');
+  // console.log(new Date(date));
 
-  const appointements = await Appointement.find({
-    startDate: { $gte: new Date(date) - 1 }
-  });
-
+  const appointements = await Appointement.find({});
+  console.log(appointements);
+  day = new Date(date).getDate();
+  let month = new Date(date).getMonth() + 1;
+  let year = new Date(date).getFullYear();
   let newFreeHourse = appointements.map(item => {
-    if (freeHourse.includes(new Date(item.startDate).getHours()))
-      return new Date(item.startDate).getHours();
+    console.log(new Date(item.startDate).getDate());
+    console.log(new Date(item.startDate).getMonth() + 1);
+    console.log(new Date(item.startDate).getFullYear());
+    if (
+      new Date(item.startDate).getDate() == day &&
+      new Date(item.startDate).getMonth() + 1 == month &&
+      new Date(item.startDate).getFullYear() == year
+    )
+      if (freeHourse.includes(new Date(item.startDate).getHours()))
+        return new Date(item.startDate).getHours();
   });
 
   freeHourse = freeHourse.filter(item => !newFreeHourse.includes(item));

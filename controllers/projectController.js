@@ -172,12 +172,6 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 
 exports.getProject = catchAsync(async (req, res, next) => {
   const project = await Project.findById(req.params.id);
-  res.sendFile(
-    path.join(
-      __dirname,
-      `../public/img/projects/0-unitCover-undefined-1668223436394-1.jpeg`
-    )
-  );
 
   // const pathname = path.join(
   //   __dirname,
@@ -208,9 +202,10 @@ exports.createProject = catchAsync(async (req, res, next) => {
   //   prev = num;
   // });
   // console.log(imagesOfUnits);
-  console.log(req.body.housingUnits);
+  // console.log(req.body.housingUnits);
+  let units;
   if (req.body.unitCover) {
-    let units = req.body.unitsCover.map((item, index) => {
+    units = req.body.unitsCover.map((item, index) => {
       return {
         name: req.body.unitName[index],
         description: req.body.unitDescription[index],
@@ -228,7 +223,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
   // }
 
   const newProject = await Project.create({
-    ...req.body
+    ...req.body,
+    housingUnits: units
   });
   console.log(newProject);
   res.status(201).json({

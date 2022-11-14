@@ -37,6 +37,7 @@ appointementSchema.pre('save', function(next) {
   if (day == 'Friday') {
     next(new AppError('please select free date', 500));
   }
+  console.log(this.startDate);
   let hour = new Date(this.startDate).getHours();
   console.log(hour);
   console.log(hour >= 10 && hour <= 14);
@@ -45,7 +46,10 @@ appointementSchema.pre('save', function(next) {
   }
   var fullDate = new Date(this.startDate);
   fullDate.setMinutes(0, 0, 0);
-  this.startDate = fullDate;
+  this.startDate.day = fullDate.getDay;
+  this.startDate.month = fullDate.getMonth;
+  this.startDate.year = fullDate.getDay;
+
   console.log(day);
   next();
 });
