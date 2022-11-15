@@ -146,8 +146,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     subject: 'confirmation code',
     message: `${resetToken}`
   });
-  // console.log('sssssss');
-  // res.send({ user, resetToken });
+  res.send({ user, resetToken });
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
@@ -188,7 +187,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = req.body.newPassword;
   user.passwordConfirm = req.body.passwordConfirm;
 
-  // console.log(user.password, user.passwordConfirm);
   await user.save();
   createSendToken(user, 200, res);
 });
