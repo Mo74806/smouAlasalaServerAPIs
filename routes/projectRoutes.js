@@ -4,6 +4,14 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
+router.route('/updateUnit/:id/:unitId').patch(
+  // authController.protect,
+  // authController.restrictTo('admin'),
+  projectController.uploadProjectImages,
+  projectController.resizeProjectImages,
+  projectController.updateUnit
+);
+
 router
   .route('/')
   .get(projectController.getAllProjects)

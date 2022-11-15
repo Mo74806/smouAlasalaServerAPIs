@@ -306,6 +306,99 @@ exports.updateProject = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.updateUnit = catchAsync(async (req, res, next) => {
+  let units;
+
+  const project1 = await Project.findById(req.params.id);
+
+  if (!project1) return next(new AppError('no project matched this id', 404));
+  let mergeUnits = [...project1.housingUnits];
+  if (req.body.unitCover) {
+    units = project1.housingUnits.map((item, index) => {
+      if (item.id == req.params.unitId) {
+        mergeUnits[index].imageCover = req.body.unitCover;
+
+        return {
+          imageCover: req.body.unitCover
+        };
+      } else {
+        mergeUnits[index].imageCover = item.imageCover;
+
+        return item;
+      }
+    });
+  }
+
+  if (req.body.unitName) {
+    units = project1.housingUnits.map((item, index) => {
+      console.log(item.id);
+      console.log(req.params.unitId == item.id);
+
+      if (item.id == req.params.unitId) {
+        mergeUnits[index].name = req.body.unitName;
+
+        return {
+          name: req.body.unitName
+        };
+      } else {
+        mergeUnits[index].name = item.name;
+        return item;
+      }
+    });
+  }
+
+  console.log(mergeUnits);
+
+  if (req.body.unitDescription) {
+    units = project1.housingUnits.map((item, index) => {
+      if (item.id == req.params.unitId) {
+        mergeUnits[index].description = req.body.unitDescription;
+
+        return {
+          description: req.body.unitDescription
+        };
+      } else {
+        mergeUnits[index].description = item.description;
+
+        return item;
+      }
+    });
+  }
+
+  // if (req.body.imageCover) {
+  //   req.body.imageCover = [...project1.imageCover, ...req.body.imageCover];
+  // }
+  // if (req.body.imageService) {
+  //   req.body.imageService = [
+  //     ...project1.imageService,
+  //     ...req.body.imageService
+  //   ];
+  // }
+  // if (req.body.imagePlan) {
+  //   req.body.imagePlan = [...project1.imagePlan, ...req.body.imagePlan];
+  // }
+
+  // console.log(req);
+  console.log('**********************');
+  console.log(mergeUnits);
+  const project = await Project.findByIdAndUpdate(
+    req.params.id,
+
+    { ...project1, housingUnits: [...units] },
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      project
+    }
+  });
+});
+
 exports.deleteProject = catchAsync(async (req, res, next) => {
   const project = await Project.findByIdAndDelete(req.params.id);
   if (!project) return next(new AppError('no project matched this id', 404));

@@ -20,7 +20,7 @@ router
 
 router
   .route('/:id')
-  // .get(authController.protect, appointementController.getAppointement)
+  .get(authController.protect, appointementController.getAppointement)
   .patch(authController.protect, appointementController.updateAppointement)
   .delete(authController.protect, appointementController.deleteAppointement);
 router

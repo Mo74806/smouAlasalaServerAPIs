@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
         return el === this.password;
       },
       message: 'Passwords are not the same!'
+    },
+    appointements: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Appointement'
     }
   },
   passwordChangedAt: Date,

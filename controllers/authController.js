@@ -31,6 +31,7 @@ const createSendToken = (user, statusCode, res) => {
   // Remove password from output
   user.password = undefined;
   user.token = token;
+  console.log(user);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -144,17 +145,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   //3)send email
-  try {
-    await sendEmail({
-      email: user.email,
-      subject: 'confirmation code',
-      message: resetToken
-    });
-    console.log('sssssss');
-    res.send({ user, resetToken });
-  } catch (e) {
-    console.log(e);
-  }
+
+  await sendEmail({
+    email: user.email,
+    subject: 'confirmation code',
+    message: `mmmmmmmmmmmmmmmmmmmmmmmmmm`
+  });
+  // console.log('sssssss');
+  // res.send({ user, resetToken });
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {

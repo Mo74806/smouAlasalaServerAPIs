@@ -2,6 +2,7 @@ const Appointement = require('./../models/appointement');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const User = require('./../models/user');
 
 exports.getAllAppointements = catchAsync(async (req, res, next) => {
   // EXECUTE QUERY
@@ -34,12 +35,13 @@ exports.getAppointement = catchAsync(async (req, res, next) => {
   });
 });
 exports.createAppointement = catchAsync(async (req, res, next) => {
-  console.log('-----------------------------');
-  console.log(req.body);
-  console.log(req.user.id);
   const newAppointement = await Appointement.create({
     ...req.body,
     user: req.user.id
+  });
+
+  const user = await User.findByIdAndUpdate(req.user.id, {
+    appointements: newAppointement.id
   });
   console.log(newAppointement);
   res.status(201).json({
