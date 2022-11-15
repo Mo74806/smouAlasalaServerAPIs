@@ -8,7 +8,7 @@ const contactSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Please tell us your name!'],
-      minlength: 8
+      minlength: 2
     },
     phone: {
       type: String,
@@ -23,7 +23,7 @@ const contactSchema = new mongoose.Schema(
     message: {
       type: String,
       required: [true, 'Please tell us your message!'],
-      minlength: 10
+      minlength: 5
     }
   },
   {

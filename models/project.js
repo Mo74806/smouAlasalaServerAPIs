@@ -41,6 +41,10 @@ const projectSchema = new mongoose.Schema(
     establishDate: {
       type: Date,
       require: [true, 'establishing date is required']
+    },
+    location: {
+      type: String,
+      enum: ['egypt', 'saudi arbia']
     }
   },
   {

@@ -34,9 +34,11 @@ exports.getContact = catchAsync(async (req, res, next) => {
   });
 });
 exports.createContact = catchAsync(async (req, res, next) => {
-console.log(req.headers);
   // console.log(req.body);
-  const newContact = await Contact.create(req.body);
+
+  const newContact = await Contact.create({ ...req.body });
+
+  console.log(newContact);
   res.status(201).json({
     status: 'success',
     data: {
