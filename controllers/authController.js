@@ -31,7 +31,6 @@ const createSendToken = (user, statusCode, res) => {
   // Remove password from output
   user.password = undefined;
   user.token = token;
-  console.log(user);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -62,7 +61,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
   }
-  console.log('jkdjdkjdkjdk');
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
 
@@ -91,10 +89,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token = req.headers?.jwt;
   // let token = req.params?.jwt;
-  // console.log(req.headers);
-  console.log('**********************');
-  console.log(token);
-  // console.log(req.headers);
   // if (
   //   req.headers.authorization &&
   //   req.headers.authorization.startsWith('Bearer')
@@ -107,7 +101,6 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('You are not logged in! Please log in to get access.', 401)
     );
   }
-  // console.log(token);
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -151,7 +144,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await sendEmail({
     email: user.email,
     subject: 'confirmation code',
-    message: `mmmmmmmmmmmmmmmmmmmmmmmmmm`
+    message: `${resetToken}`
   });
   // console.log('sssssss');
   // res.send({ user, resetToken });

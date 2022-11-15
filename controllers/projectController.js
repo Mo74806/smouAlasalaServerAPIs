@@ -10,8 +10,6 @@ const path = require('path');
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
-  console.log(req.files);
-
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
@@ -34,28 +32,7 @@ exports.uploadProjectImages = upload.fields([
   { name: 'imagePlan', maxCount: 15 }
 ]);
 
-// upload.single('image') req.file
-// upload.array('images', 5) req.files
-
 exports.resizeProjectImages = catchAsync(async (req, res, next) => {
-  // console.log(req.files.imageCover);
-
-  // if (
-  //   !req.files.imageCover ||
-  //   !req.files.images ||
-  //   !req.files.housingUnitsimageCover ||
-  //   !req.files.housingUnitsimages
-  // )
-  //   return next();
-
-  // 1) Cover image
-  // console.log(req.body);
-  // req.body.imageCover = `projects-${req.params.id}-${Date.now()}-cover.jpeg`;
-  // await sharp(req.files.imageCover[0].buffer)
-  //   .resize(700, 450)
-  //   .toFormat('jpeg')
-  //   .jpeg({ quality: 90 })
-  //   .toFile(`public/img/projects/${req.body.imageCover}`);
   if (req.files.imageCover) {
     req.body.imageCover = [];
     await Promise.all(
@@ -102,14 +79,9 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
       })
     );
   }
-  // //3)housingUnitCoverImage
-
-  // req.body.housingUnitsimageCover = `projects-${
-  //   req.params.id
-  // }-${Date.now()}-cover.jpeg`;
+  //3)housingUnitCoverImage
   if (req.files.unitCover) {
     req.body.unitsCover = [];
-    // console.log(unitCover);
     await Promise.all(
       req.files.unitCover.map(async (file, i) => {
         const filename = `${i}-unitCover-${req.params.id}-${Date.now()}-${i +
@@ -125,35 +97,11 @@ exports.resizeProjectImages = catchAsync(async (req, res, next) => {
       })
     );
   }
-  console.log('------------------------');
-  console.log(req.body.unitsCover);
-  console.log('----------------------');
-  // req.body.housingUnitsimages = [];
-  // await Promise.all(
-  //   req.files.unitImages.map(async (file, i) => {
-  //     const filename = `${i}-project-${req.params.id}-${Date.now()}.jpeg`;
-  //     await sharp(file.buffer)
-  //       .resize(700, 450)
-  //       .toFormat('jpeg')
-  //       .jpeg({ quality: 90 })
-  //       .toFile(`public/img/projects/housingUnits/${filename}`);
-  //     req.body.housingUnitsimages.push(filename);
-  //   })
-  // );
 
   next();
 });
 
-// exports.aliasTopProjects = (req, res, next) => {
-//   req.query.limit = '5';
-//   req.query.sort = '-ratingsAverage,price';
-//   req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
-//   next();
-// };
-
 exports.getAllProjects = catchAsync(async (req, res, next) => {
-  // EXECUTE QUERY
-
   const features = new APIFeatures(Project.find(), req.query)
     .filter()
     .sort()
@@ -164,45 +112,22 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     results: projects.length,
-    data: {
-      projects
-    }
+    projects
   });
 });
 
 exports.getProject = catchAsync(async (req, res, next) => {
   const project = await Project.findById(req.params.id);
-
-  // const pathname = path.join(
-  //   __dirname,
-  //   `../public/img/projects/0-unitCover-undefined-1668223436394-1.jpeg`
-  // );
-  // res.sendFile(pathname);
-
   if (!project) {
     return next(new AppError('no Project matched this id', 404));
   }
   res.status(200).json({
     status: 'success',
-    data: {
-      project
-    }
+    project
   });
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  // console.log(req.body);
-  // let imagesOfUnits = [];
-  // let prev = 0;
-  // JSON.parse(req.body.unitImagesNum).map((num, index) => {
-  //   console.log(index);
-  //   for (let i = prev; i < prev + num; i++) {
-  //     imagesOfUnits.push({ image: req.body.housingUnitsimages[i], index });
-  //   }
-  //   prev = num;
-  // });
-  // console.log(imagesOfUnits);
-  // console.log(req.body.housingUnits);
   let units;
   units = req.body.unitsCover.map((item, index) => {
     return {
@@ -331,9 +256,6 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
 
   if (req.body.unitName) {
     units = project1.housingUnits.map((item, index) => {
-      console.log(item.id);
-      console.log(req.params.unitId == item.id);
-
       if (item.id == req.params.unitId) {
         mergeUnits[index].name = req.body.unitName;
 
@@ -346,8 +268,6 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
       }
     });
   }
-
-  console.log(mergeUnits);
 
   if (req.body.unitDescription) {
     units = project1.housingUnits.map((item, index) => {
@@ -364,23 +284,6 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
       }
     });
   }
-
-  // if (req.body.imageCover) {
-  //   req.body.imageCover = [...project1.imageCover, ...req.body.imageCover];
-  // }
-  // if (req.body.imageService) {
-  //   req.body.imageService = [
-  //     ...project1.imageService,
-  //     ...req.body.imageService
-  //   ];
-  // }
-  // if (req.body.imagePlan) {
-  //   req.body.imagePlan = [...project1.imagePlan, ...req.body.imagePlan];
-  // }
-
-  // console.log(req);
-  console.log('**********************');
-  console.log(mergeUnits);
   const project = await Project.findByIdAndUpdate(
     req.params.id,
 
