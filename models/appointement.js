@@ -7,6 +7,7 @@ const appointementSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
+      unique: [true, 'you already have an appointement'],
       ref: 'user'
     },
     startDate: {

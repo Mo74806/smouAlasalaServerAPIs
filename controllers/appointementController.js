@@ -43,7 +43,6 @@ exports.createAppointement = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.user.id, {
     appointements: newAppointement.id
   });
-  console.log(newAppointement);
   res.status(201).json({
     status: 'success',
     data: {
@@ -93,15 +92,19 @@ exports.setAppointementConfirmed = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteAppointement = catchAsync(async (req, res, next) => {
-  const appointement = await Appointement.findByIdAndDelete(req.params.id);
+  const appointement = await Appointement.findById(req.params.id);
   console.log(appointement);
-
   if (!appointement)
     return next(new AppError('no appointement matched this id', 404));
-
   if (req.user.role != 'admin')
     if (req.user.id != appointement.user)
       return next(new AppError('you are not authorized', 302));
+
+  const user = await User.findByIdAndUpdate(req.user.id, {
+    appointements: null
+  });
+
+  await Appointement.findByIdAndDelete(req.params.id);
 
   res.status(204).json({
     status: 'success',
@@ -111,6 +114,11 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
 
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
+
+  if (Date.now() > new Date(date)) {
+    return next(new AppError('please select a newer date time', 404));
+  }
+
   let freeHourse = [10, 11, 12, 13, 14];
   var dayName = [
     'Sunday',
@@ -121,7 +129,6 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
     'Friday',
     'Saturday'
   ];
-  console.log(dayName[new Date(date).getDay()]);
   var day = dayName[new Date(date).getDay()];
   if (day == 'Friday') {
     res.status(200).json({
@@ -129,18 +136,12 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
       data: null
     });
   }
-  // console.log('pppppppppp----------------ppppppppppppp');
-  // console.log(new Date(date));
 
   const appointements = await Appointement.find({});
-  console.log(appointements);
   day = new Date(date).getDate();
   let month = new Date(date).getMonth() + 1;
   let year = new Date(date).getFullYear();
   let newFreeHourse = appointements.map(item => {
-    console.log(new Date(item.startDate).getDate());
-    console.log(new Date(item.startDate).getMonth() + 1);
-    console.log(new Date(item.startDate).getFullYear());
     if (
       new Date(item.startDate).getDate() == day &&
       new Date(item.startDate).getMonth() + 1 == month &&
