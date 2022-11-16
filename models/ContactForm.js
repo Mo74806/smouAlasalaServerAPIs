@@ -25,7 +25,7 @@ const contactSchema = new mongoose.Schema(
       required: [true, 'Please tell us your message!'],
       minlength: 5
     },
-    stared: { type: Boolean, default: false }
+    stared: { type: String, default: "false" }
   },
   {
     toJSON: { virtuals: true },
