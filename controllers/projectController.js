@@ -258,6 +258,33 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.deleteImage = catchAsync(async (req, res, next) => {
+  //get the project by id
+  const project1 = await Project.findById(req.params.id);
+
+  let images = project1[req.params.fieldName];
+  let returnImages = images.filter(item => {
+    if (item != req.params.imageName) return item;
+  });
+  console.log(returnImages);
+  project1[req.params.fieldName] = [...returnImages];
+  const project = await Project.findByIdAndUpdate(
+    req.params.id,
+    { ...project1 },
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      project
+    }
+  });
+});
+
 exports.deleteProject = catchAsync(async (req, res, next) => {
   const project = await Project.findByIdAndDelete(req.params.id);
   if (!project) return next(new AppError('no project matched this id', 404));

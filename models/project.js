@@ -74,7 +74,7 @@ module.exports = Project;
 10-upload the cv to the drive
 11-finalize auth & authrization
 12-test the error message in production
-
+13-\\projects\:id\:fieldName\:imageName //delete images
 
 
 

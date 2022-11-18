@@ -12,6 +12,12 @@ router.route('/updateUnit/:id/:unitId').patch(
   projectController.updateUnit
 );
 
+router.route('/removeImage/:id/:fieldName/:imageName').patch(
+  // authController.protect,
+  // authController.restrictTo('admin'),
+  projectController.deleteImage
+);
+
 router
   .route('/')
   .get(projectController.getAllProjects)

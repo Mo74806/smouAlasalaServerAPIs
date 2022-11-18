@@ -42,5 +42,12 @@ router
     authController.restrictTo('admin'),
     userController.deleteUser
   );
+router
+  .route('/role/isUserAdmin')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    authController.returnAdminData
+  );
 
 module.exports = router;
