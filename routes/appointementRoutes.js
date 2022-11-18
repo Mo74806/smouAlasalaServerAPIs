@@ -20,14 +20,21 @@ router
 
 router
   .route('/:id')
-  .get(authController.protect, appointementController.getAppointement)
-  .patch(authController.protect, appointementController.updateAppointement)
-  .delete(authController.protect, appointementController.deleteAppointement);
-router
-  .route('/setConfirmed/:id')
+  .get(
+    // authController.protect,
+    appointementController.getAppointement
+  )
   .patch(
-    authController.protect,
-    appointementController.setAppointementConfirmed
+    // authController.protect,
+    appointementController.updateAppointement
+  )
+  .delete(
+    // authController.protect,
+    appointementController.deleteAppointement
   );
+router.route('/setConfirmed/:id').patch(
+  // authController.protect,
+  appointementController.setAppointementConfirmed
+);
 
 module.exports = router;

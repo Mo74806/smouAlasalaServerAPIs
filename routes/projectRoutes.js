@@ -8,7 +8,7 @@ router.route('/updateUnit/:id/:unitId').patch(
   // authController.protect,
   // authController.restrictTo('admin'),
   projectController.uploadProjectImages,
-  projectController.resizeProjectImages,
+  projectController.handleProjectFiles,
   projectController.updateUnit
 );
 
@@ -19,8 +19,7 @@ router
     // authController.protect,
     // authController.restrictTo('admin'),
     projectController.uploadProjectImages,
-    projectController.resizeProjectImages,
-    // projectController.uploadimage.single('imageCover'),
+    projectController.handleProjectFiles,
     projectController.createProject
   );
 
@@ -31,7 +30,7 @@ router
     // authController.protect,
     // authController.restrictTo('admin'),
     projectController.uploadProjectImages,
-    projectController.resizeProjectImages,
+    projectController.handleProjectFiles,
     projectController.updateProject
   )
   .delete(

@@ -16,10 +16,10 @@ router
 router
   .route('/:id')
   .get(contactController.getContact)
-  //   .patch(contactController.updateContact)
+  .patch(contactController.updateContact)
   .delete(
-    authController.protect,
-    authController.restrictTo('admin'),
+    // authController.protect,
+    // authController.restrictTo('admin'),
     contactController.deleteContact
   );
 

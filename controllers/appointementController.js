@@ -22,6 +22,7 @@ exports.getAllAppointements = catchAsync(async (req, res, next) => {
     }
   });
 });
+
 exports.getAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement) {
@@ -40,9 +41,11 @@ exports.createAppointement = catchAsync(async (req, res, next) => {
     user: req.user.id
   });
 
+  //put the appointement ID at the user data
   const user = await User.findByIdAndUpdate(req.user.id, {
     appointements: newAppointement.id
   });
+
   res.status(201).json({
     status: 'success',
     data: {
@@ -72,6 +75,8 @@ exports.updateAppointement = catchAsync(async (req, res, next) => {
 });
 
 exports.setAppointementConfirmed = catchAsync(async (req, res, next) => {
+  //change the status of the appointement by the admin
+  //confirm the appointement
   const appointement = await Appointement.findByIdAndUpdate(
     req.params.id,
     { confirm: true },
@@ -93,28 +98,26 @@ exports.setAppointementConfirmed = catchAsync(async (req, res, next) => {
 
 exports.deleteAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findById(req.params.id);
-  console.log(appointement);
   if (!appointement)
     return next(new AppError('no appointement matched this id', 404));
   if (req.user.role != 'admin')
     if (req.user.id != appointement.user)
       return next(new AppError('you are not authorized', 302));
 
+  //delete the reference from the user data
   const user = await User.findByIdAndUpdate(req.user.id, {
     appointements: null
   });
 
   await Appointement.findByIdAndDelete(req.params.id);
-
   res.status(204).json({
     status: 'success',
     data: null
   });
 });
-
+//return the avaliable free apoointements in the day
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
-
   if (Date.now() > new Date(date)) {
     return next(new AppError('please select a newer date time', 404));
   }

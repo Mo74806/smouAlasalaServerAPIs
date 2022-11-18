@@ -7,6 +7,7 @@ const contactSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      validate: [validator.isAlpha, 'please enter a valid name'],
       required: [true, 'Please tell us your name!'],
       minlength: 2
     },
@@ -22,10 +23,11 @@ const contactSchema = new mongoose.Schema(
     },
     message: {
       type: String,
+      trim: true,
       required: [true, 'Please tell us your message!'],
       minlength: 5
     },
-    stared: { type: String, default: "false" }
+    stared: { type: String, default: 'false' }
   },
   {
     toJSON: { virtuals: true },
