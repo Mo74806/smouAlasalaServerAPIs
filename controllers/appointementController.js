@@ -105,7 +105,7 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
   // return next(new AppError('you are not authorized', 302));
 
   //delete the reference from the user data
-  const user = await User.findByIdAndUpdate(req.user.id, {
+  const user = await User.findByIdAndUpdate(appointement.user, {
     appointements: null
   });
 
