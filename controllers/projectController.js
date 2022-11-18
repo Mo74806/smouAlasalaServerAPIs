@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/img/projects/');
   },
   filename: function(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    cb(null, file.originalname); //Appending extension
   }
 });
 
@@ -68,9 +68,7 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     req.body.imageCover = [];
     await Promise.all(
       req.files.imageCover.map((file, i) => {
-        req.body.imageCover.push(
-          `${file.filename}.${file.originalname.split('.')[1]}`
-        );
+        req.body.imageCover.push(file.originalname);
       })
     );
   }
@@ -80,9 +78,7 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     req.body.imageService = [];
     await Promise.all(
       req.files.imageService.map((file, i) => {
-        req.body.imageService.push(
-          `${file.filename}.${file.originalname.split('.')[1]}`
-        );
+        req.body.imageService.push(file.originalname);
       })
     );
   }
@@ -91,9 +87,7 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     req.body.imagePlan = [];
     await Promise.all(
       req.files.imagePlan.map(async (file, i) => {
-        req.body.imagePlan.push(
-          `${file.filename}.${file.originalname.split('.')[1]}`
-        );
+        req.body.imagePlan.push(file.originalname);
       })
     );
   }
@@ -102,9 +96,7 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     req.body.unitsCover = [];
     await Promise.all(
       req.files.unitCover.map(async (file, i) => {
-        req.body.unitsCover.push(
-          `${file.filename}.${file.originalname.split('.')[1]}`
-        );
+        req.body.unitsCover.push(file.originalname);
       })
     );
   }
@@ -114,9 +106,7 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     req.body.imageService = [];
     await Promise.all(
       req.files.parsure.map((file, i) => {
-        req.body.parsure.push(
-          `${file.filename}.${file.originalname.split('.')[1]}`
-        );
+        req.body.parsure.push(file.originalname);
       })
     );
   }
