@@ -2,6 +2,7 @@ const User = require('./../models/user');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const Appointement = require('./../models/appointement');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   // EXECUTE QUERY
@@ -60,6 +61,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id);
   if (!user) return next(new AppError('no user matched this id', 404));
 
+  Appointement.findOneAndDelete({ id: user.appointements });
   res.status(204).json({
     status: 'success',
     data: null

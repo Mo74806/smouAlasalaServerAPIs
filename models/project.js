@@ -70,11 +70,11 @@ module.exports = Project;
 6-schema validation /joi validation---------->done
 7-put the status of the appointement
 8-make the user able to book an appointement after the passed appointements
-9-delete the appointement if the user is deleted
+9-delete the appointement if the user is deleted ------------>delete
 10-upload the cv to the drive
 11-finalize auth & authrization
 12-test the error message in production
-13-\\projects\:id\:fieldName\:imageName //delete images
+13-\\projects\:id\:fieldName\:imageName //delete images---------->done
 
 
 

@@ -100,9 +100,9 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement)
     return next(new AppError('no appointement matched this id', 404));
-  if (req.user.role != 'admin')
-    if (req.user.id != appointement.user)
-      return next(new AppError('you are not authorized', 302));
+  // if (req.user.role != 'admin')
+  // if (req.user.id != appointement.user)
+  // return next(new AppError('you are not authorized', 302));
 
   //delete the reference from the user data
   const user = await User.findByIdAndUpdate(req.user.id, {
