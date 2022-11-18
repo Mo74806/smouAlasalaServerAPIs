@@ -18,10 +18,35 @@ const multer = require('multer');
 //   }
 // };
 
+var path = require('path');
+
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'public/img/projects/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+  }
+});
+
 const upload = multer(
+  {
+    storage: storage
+  }
   // {
-  // storage: multerStorage,
-  { dest: 'public/img/projects/' }
+  //   dest: function(req, file, cb) {
+  //     cb(null, 'public/img/projects');
+  //   },
+  //   filename: function(req, file, cb) {
+  //     cb(
+  //       null,
+  //       Date.now() +
+  //         `${path.extname(file.originalname)}.${
+  //           file.originalname.split('.')[1]
+  //         }`
+  //     ); //Appending extension
+  //   }
+  // }
   // fileFilter: multerFilter
   // }
 );
