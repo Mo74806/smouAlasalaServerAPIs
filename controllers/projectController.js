@@ -194,18 +194,18 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  // let units = req.body.unitsCover.map((item, index) => {
-  //   return {
-  //     name: req.body.unitName[index],
-  //     description: req.body.unitDescription[index],
-  //     imageCover: item
-  //   };
-  // });
+  let units = req.body.unitsCover.map((item, index) => {
+    return {
+      name: req.body.unitName[index],
+      description: req.body.unitDescription[index],
+      imageCover: item
+    };
+  });
 
   const newProject = await Project.create({
     ...req.body,
-    parsure: req.files.parsure[0].originalname
-    // housingUnits: units
+    parsure: req.files.parsure[0].originalname,
+    housingUnits: units
   });
 
   res.status(201).json({
@@ -344,7 +344,7 @@ exports.deleteProject = catchAsync(async (req, res, next) => {
 
 exports.increaseParsureDownloads = catchAsync(async (req, res, next) => {
   const project = await Project.findByIdAndUpdate(req.params.id, {
-    parsureDownloads: { $inc: 1 }
+    $inc: { parsureDownloads: 1 }
   });
   if (!project) return next(new AppError('no project matched this id', 404));
 
