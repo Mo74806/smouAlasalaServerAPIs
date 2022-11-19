@@ -118,7 +118,7 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
 //return the avaliable free apoointements in the day
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
-  if (Date.now() > new Date(date)) {
+  if (Date.now() - 24 * 60 * 60 * 1000 > new Date(date).getTime()) {
     return next(new AppError('please select a newer date time', 404));
   }
 
@@ -136,7 +136,8 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   if (day == 'Friday') {
     res.status(200).json({
       status: 'success',
-      data: null
+      data: null,
+      message: 'this is a dayoff '
     });
   }
 
@@ -162,4 +163,23 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
       freeHourse
     }
   });
+});
+
+exports.verfiyLastAppointement = catchAsync(async (req, res, next) => {
+  console.log('iam here');
+  console.log(req.user._id);
+  const appointement = await Appointement.findOne({ use: req.user._id });
+  console.log(appointement);
+  if (!appointement) return next();
+  console.log(new Date(appointement.startDate).getTime());
+  console.log(Date.now());
+  if (new Date(appointement.startDate).getTime() < Date.now()) {
+    console.log('in condition');
+    const user = await User.findByIdAndUpdate(req.user._id, {
+      appointements: null
+    });
+    await Appointement.findByIdAndDelete(appointement.id);
+  }
+
+  next();
 });

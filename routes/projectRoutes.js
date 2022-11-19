@@ -18,6 +18,12 @@ router.route('/removeImage/:id/:fieldName/:imageName').patch(
   projectController.deleteImage
 );
 
+router.route('/increaseParsureDownloads/:id').patch(
+  // authController.protect,
+  // authController.restrictTo('admin'),
+  projectController.increaseParsureDownloads
+);
+
 router
   .route('/')
   .get(projectController.getAllProjects)

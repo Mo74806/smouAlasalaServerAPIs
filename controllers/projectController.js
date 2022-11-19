@@ -3,10 +3,13 @@ const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const multer = require('multer');
+const DatauriParser = require('datauri/parser');
+const { cloudinary } = require('../utils/cloundinary');
 // const sharp = require('sharp');
 // const fs = require('fs');
 // const path = require('path');
 // const multerStorage = multer.memoryStorage();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 // const multerFilter = (req, file, cb) => {
 //   // if (file.mimetype.startsWith('image')) {
@@ -17,6 +20,13 @@ const multer = require('multer');
 //     cb(new AppError('Not an image! Please upload only images.', 400), false);
 //   }
 // };
+
+const storage1 = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'DEV'
+  }
+});
 
 var path = require('path');
 
@@ -31,6 +41,7 @@ var storage = multer.diskStorage({
 
 const upload = multer(
   {
+    // storage: storage1
     storage: storage
   }
   // {
@@ -59,10 +70,56 @@ exports.uploadProjectImages = upload.fields([
     maxCount: 10
   },
   { name: 'imagePlan', maxCount: 15 },
-  { name: 'parsure', maxCount: 1 }
+  { name: 'parsure', maxCount: 100 }
 ]);
 
 exports.handleProjectFiles = catchAsync(async (req, res, next) => {
+  ///////UPLOAD ON CLOUDINARY////////////////////
+  //1)imageCover
+  // if (req.files.imageCover) {
+  //   req.body.imageCover = [];
+  //   await Promise.all(
+  //     req.files.imageCover.map((file, i) => {
+  //       req.body.imageCover.push(file.path);
+  //     })
+  //   );
+  // }
+
+  // // 2) imageServices
+  // if (req.files.imageService) {
+  //   req.body.imageService = [];
+  //   await Promise.all(
+  //     req.files.imageService.map((file, i) => {
+  //       req.body.imageService.push(file.path;
+  //     })
+  //   );
+  // }
+  // //3)imagePlan
+  // if (req.files.imagePlan) {
+  //   req.body.imagePlan = [];
+  //   await Promise.all(
+  //     req.files.imagePlan.map(async (file, i) => {
+  //       req.body.imagePlan.push(file.path);
+  //     })
+  //   );
+  // }
+  // //4)housingUnitCoverImage
+  // if (req.files.unitCover) {
+  //   req.body.unitsCover = [];
+  //   await Promise.all(
+  //     req.files.unitCover.map(async (file, i) => {
+  //       req.body.unitsCover.push(file.path);
+  //     })
+  //   );
+  // }
+
+  // // 5) parsure
+  // // console.log(req.files.parsure);
+  // // req.body.parsure = [];
+  // // if (req.files.parsure) req.body.parsure.push(req.files.parsure[0].path);
+
+  //////////////////////////////////////////////////////////////////////////////
+  ///////UPLOAD ON PUBLIC////////////////////
   //1)imageCover
   if (req.files.imageCover) {
     req.body.imageCover = [];
@@ -102,14 +159,10 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
   }
 
   // 5) parsure
-  if (req.files.parsure) {
-    req.body.imageService = [];
-    await Promise.all(
-      req.files.parsure.map((file, i) => {
-        req.body.parsure.push(file.originalname);
-      })
-    );
-  }
+  console.log(req.files.parsure);
+  req.body.parsure = [];
+  if (req.files.parsure)
+    req.body.parsure.push(req.files.parsure[0].originalname);
 
   next();
 });
@@ -140,29 +193,6 @@ exports.getProject = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.upload1 = multer({ dest: 'public/files' });
-
-const multerStorage1 = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public');
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `files/admin-${file.fieldname}.${ext}`);
-  }
-});
-const multerFilter1 = (req, file, cb) => {
-  if (file.mimetype.split('/')[1] === 'pdf') {
-    cb(null, true);
-  } else {
-    cb(new Error('Not a PDF File!!'), false);
-  }
-};
-exports.upload1 = multer({
-  dest: 'public/files',
-  fileFilter: multerFilter1
-});
-
 exports.createProject = catchAsync(async (req, res, next) => {
   let units = req.body.unitsCover.map((item, index) => {
     return {
@@ -174,6 +204,7 @@ exports.createProject = catchAsync(async (req, res, next) => {
 
   const newProject = await Project.create({
     ...req.body,
+    // parsure: req.files.parsure[0].path,
     housingUnits: units
   });
 
@@ -307,5 +338,17 @@ exports.deleteProject = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: 'success',
     data: null
+  });
+});
+
+exports.increaseParsureDownloads = catchAsync(async (req, res, next) => {
+  const project = await Project.findByIdAndUpdate(req.params.id, {
+    parsureDownloads: { $inc: 1 }
+  });
+  if (!project) return next(new AppError('no project matched this id', 404));
+
+  res.status(204).json({
+    status: 'success',
+    data: project
   });
 });

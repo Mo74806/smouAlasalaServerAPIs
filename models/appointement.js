@@ -27,6 +27,10 @@ const appointementSchema = new mongoose.Schema(
 //pre save middleware to check if the user chooce
 //valid day and valid time and free appointement
 appointementSchema.pre('save', function(next) {
+  if (new Date(this.startDate).getTime() < Date.now()) {
+    next(new AppError('please select upcommig days', 500));
+  }
+
   var dayName = [
     'Sunday',
     'Monday',
@@ -36,7 +40,7 @@ appointementSchema.pre('save', function(next) {
     'Friday',
     'Saturday'
   ];
-  var day = dayName[new Date(this.startDate).getDay()];
+  var day = dayName[new Date(this.startDate)];
   if (day == 'Friday') {
     next(new AppError('please select free date', 500));
   }

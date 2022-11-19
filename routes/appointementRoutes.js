@@ -16,7 +16,11 @@ router
     // authController.restrictTo('admin'),
     appointementController.getAllAppointements
   )
-  .post(authController.protect, appointementController.createAppointement);
+  .post(
+    authController.protect,
+    appointementController.verfiyLastAppointement,
+    appointementController.createAppointement
+  );
 
 router
   .route('/:id')

@@ -49,6 +49,10 @@ const projectSchema = new mongoose.Schema(
     },
     parsure: {
       type: String
+    },
+    parsureDownloads: {
+      type: Number,
+      default: 0
     }
   },
   {
@@ -65,17 +69,19 @@ module.exports = Project;
 1-create project  --------------------->done 
 2-resize images from tarek code ----------->done
 3-add phone in user schema------------->done
-4-signup with google
-5-uploaad images on cloud 
+4-signup with google ------------------>done
+5-uploaad images on cloud ------------------->done
 6-schema validation /joi validation---------->done
 7-put the status of the appointement
-8-make the user able to book an appointement after the passed appointements
+8-make the user able to book an appointement after the passed appointements---------->done
 9-delete the appointement if the user is deleted ------------>delete
 10-upload the cv to the drive
-11-finalize auth & authrization
+11-finalize auth & authrization------------>tarek,yasser
 12-test the error message in production
 13-\\projects\:id\:fieldName\:imageName //delete images---------->done
-
+14-dark Mode
+15-arabic &english
+16-download parsure
 
 
 
