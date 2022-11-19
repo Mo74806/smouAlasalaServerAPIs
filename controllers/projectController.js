@@ -159,10 +159,10 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
   }
 
   // 5) parsure
-  console.log(req.files.parsure);
-  req.body.parsure = [];
-  if (req.files.parsure)
-    req.body.parsure.push(req.files.parsure[0].originalname);
+  // console.log(req.files.parsure);
+  // req.body.parsure = [];
+  // if (req.files.parsure)
+  //   req.body.parsure.push(req.files.parsure[0].originalname[0]);
 
   next();
 });
@@ -194,18 +194,18 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  let units = req.body.unitsCover.map((item, index) => {
-    return {
-      name: req.body.unitName[index],
-      description: req.body.unitDescription[index],
-      imageCover: item
-    };
-  });
+  // let units = req.body.unitsCover.map((item, index) => {
+  //   return {
+  //     name: req.body.unitName[index],
+  //     description: req.body.unitDescription[index],
+  //     imageCover: item
+  //   };
+  // });
 
   const newProject = await Project.create({
     ...req.body,
-    // parsure: req.files.parsure[0].path,
-    housingUnits: units
+    parsure: req.files.parsure[0].originalname
+    // housingUnits: units
   });
 
   res.status(201).json({
@@ -239,7 +239,8 @@ exports.updateProject = catchAsync(async (req, res, next) => {
   const project = await Project.findByIdAndUpdate(
     req.params.id,
     {
-      ...req.body
+      ...req.body,
+      parsure: req.files.parsure[0].originalname
     },
     {
       new: true,
