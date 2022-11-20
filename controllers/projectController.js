@@ -242,7 +242,7 @@ exports.updateProject = catchAsync(async (req, res, next) => {
     req.params.id,
     {
       ...req.body,
-      parsure: req.files.parsure[0].originalname
+      parsure: req.files.parsure[0]?.originalname
     },
     {
       new: true,

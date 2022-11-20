@@ -1,0 +1,42 @@
+{
+  "coverTitle": {
+    "ar": "سمو الأصالة",
+    "en": "Smou Al asalaa"
+  },
+  "coverSubTitle": {
+    "ar": " للتطويــر والإستثـمار العقـاري",
+    "en": "For real estate development and investment"
+  },
+  "coverText": {
+    "ar": " نسعى في سمو الأصالة لخلقِ مجتمع ملهم، بأفكار عقارية إبداعية ترقىلطموحات عملائنا وشركاؤنا وتسمو بجودة الحياة وفقاً لأهداف رؤية المملكة ٢٠٣٠ م.",
+    "en": "We seek, in  Smou Al asalaa, to create an inspiring society, with creative real estate ideas that riseTo meet the aspirations of our customers and partners and to improve the quality of life according to the  the visionKingdom 2030 ."
+  },
+  "sliderTitle": {
+    "ar": "مجالات عمالنا",
+    "en": "Our specialties"
+  },
+
+  "subTitle": {
+    "ar": [
+      "القطاع السكني",
+      "القطاع الفندقي",
+      "القطاع الاداري",
+      "الفطاع التجاري"
+    ],
+    "en": [
+      "The residential sector",
+      "Hospitality sector",
+      "Administrative sector",
+      "Commercial sector"
+    ]
+  },
+
+  "timelineTitle": {
+    "ar": " خطوات عملنا",
+    "en": "Our work steps"
+  },
+  "timelineSubTitle": {
+    "ar": " نسعى في سمو الأصاله في إدارة المشاريع والإشراف عليها من خلالمنظومة متكامله وخطوات متراتبه لضمان نجاح المشاريع.",
+    "en": "We seek the highness of originality in managing and supervising projects through An integrated system and sequential steps to ensure the success of projects."
+  }
+}
