@@ -12,8 +12,8 @@ const sendEmail = async options => {
     port: 465,
     secure: true,
     auth: {
-      user: 'm.khaled201774@gmail.com',
-      pass: 'zvrqsdnvvgdpssag'
+      user: 'mail',
+      pass: 'pass'
     }
   });
 
