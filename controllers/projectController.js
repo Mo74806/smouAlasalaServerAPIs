@@ -238,17 +238,31 @@ exports.updateProject = catchAsync(async (req, res, next) => {
   if (req.body.imagePlan) {
     req.body.imagePlan = [...project1.imagePlan, ...req.body.imagePlan];
   }
-  const project = await Project.findByIdAndUpdate(
-    req.params.id,
-    {
-      ...req.body,
-      parsure: req.files.parsure[0]?.originalname
-    },
-    {
-      new: true,
-      runValidators: true
-    }
-  );
+
+  if (req.files.parsure) {
+    const project = await Project.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body,
+        parsure: req.files.parsure[0]?.originalname
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+  } else {
+    const project = await Project.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+  }
 
   res.status(200).json({
     status: 'success',
