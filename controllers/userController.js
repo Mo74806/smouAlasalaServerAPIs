@@ -66,3 +66,19 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+exports.getUserStats = catchAsync(async (req, res, next) => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+  const user = await User.aggregate([
+    { $match: { createdAt: { $gte: lastYear } } },
+    { $project: { month: { $month: '$createdAt' } } },
+    { $group: { _id: '$month', total: { $sum: 1 } } }
+  ]);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});

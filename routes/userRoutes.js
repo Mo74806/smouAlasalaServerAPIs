@@ -3,7 +3,13 @@ const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
 
 const router = express.Router();
-
+router
+  .route('/userStats')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    userController.getUserStats
+  );
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
