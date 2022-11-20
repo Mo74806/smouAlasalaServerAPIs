@@ -9,7 +9,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(User.find(), req.query)
     .filter()
     .sort()
-    .limitFields()
     .paginate();
   const users = await features.query;
 

@@ -5,66 +5,69 @@ const crypto = require('crypto');
 const { stringify } = require('querystring');
 const catchAsync = require('../utils/catchAsync');
 //user schema
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    minlength: 2,
-    validate: [validator.isAlpha, 'please enter a valid name'],
-    required: [true, 'Please tell us your name!']
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      minlength: 2,
+      validate: [validator.isAlpha, 'please enter a valid name'],
+      required: [true, 'Please tell us your name!']
+    },
+    lastName: {
+      type: String,
+      minlength: 2,
+      validate: [validator.isAlpha, 'please enter a valid name'],
+      required: [true, 'Please tell us your name!']
+    },
+    userName: {
+      type: String,
+      minlength: 3,
+      unique: true,
+      lowercase: true,
+      required: [true, 'Please tell us your userName!']
+    },
+    phone: {
+      type: String,
+      validate: [validator.isMobilePhone, 'please enter a valid phone number']
+    },
+    email: {
+      type: String,
+      required: [true, 'Please provide your email'],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, 'Please provide a valid email']
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user'
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide a password'],
+      minlength: 8,
+      select: false
+    },
+    passwordConfirm: {
+      type: String,
+      required: [true, 'Please confirm your password'],
+      validate: {
+        validator: function(el) {
+          return el === this.password;
+        },
+        message: 'Passwords are not the same!'
+      }
+    },
+    appointements: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Appointement'
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    PasswordResetExpires: Date
   },
-  lastName: {
-    type: String,
-    minlength: 2,
-    validate: [validator.isAlpha, 'please enter a valid name'],
-    required: [true, 'Please tell us your name!']
-  },
-  userName: {
-    type: String,
-    minlength: 3,
-    unique: true,
-    lowercase: true,
-    required: [true, 'Please tell us your userName!']
-  },
-  phone: {
-    type: String,
-    validate: [validator.isMobilePhone, 'please enter a valid phone number']
-  },
-  email: {
-    type: String,
-    required: [true, 'Please provide your email'],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email']
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
-  },
-  password: {
-    type: String,
-    required: [true, 'Please provide a password'],
-    minlength: 8,
-    select: false
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      validator: function(el) {
-        return el === this.password;
-      },
-      message: 'Passwords are not the same!'
-    }
-  },
-  appointements: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Appointement'
-  },
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  PasswordResetExpires: Date
-});
+  { timestamps: true }
+);
 
 //pre save middleware to hash the basword
 userSchema.pre('save', async function(next) {

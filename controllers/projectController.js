@@ -197,7 +197,9 @@ exports.createProject = catchAsync(async (req, res, next) => {
   let units = req.body.unitsCover.map((item, index) => {
     return {
       name: req.body.unitName[index],
+      nameEN: req.body.unitNameEN[index],
       description: req.body.unitDescription[index],
+      descriptionEN: req.body.unitDescriptionEN[index],
       imageCover: item
     };
   });
@@ -280,12 +282,28 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
         : (mergeUnits[index].name = item.name)
     );
   }
+
+  if (req.body.unitNameEN) {
+    project1.housingUnits.map((item, index) =>
+      item.id == req.params.unitId
+        ? (mergeUnits[index].nameEN = req.body.unitNameEN)
+        : (mergeUnits[index].nameEN = item.nameEN)
+    );
+  }
   //if there change in the unitDescription
   if (req.body.unitDescription) {
     project1.housingUnits.map((item, index) =>
       item.id == req.params.unitId
         ? (mergeUnits[index].description = req.body.unitDescription)
         : (mergeUnits[index].description = item.description)
+    );
+  }
+
+  if (req.body.unitDescriptionEN) {
+    project1.housingUnits.map((item, index) =>
+      item.id == req.params.unitId
+        ? (mergeUnits[index].descriptionEN = req.body.unitDescriptionEN)
+        : (mergeUnits[index].descriptionEN = item.descriptionEN)
     );
   }
   const project = await Project.findByIdAndUpdate(

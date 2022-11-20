@@ -1,3 +1,4 @@
+const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
 // const slugify = require('slugify');
 const validator = require('validator');
@@ -9,8 +10,18 @@ const projectSchema = new mongoose.Schema(
       require: [true, 'A project Must Have  a Name'],
       minlength: [3, 'A project Name must be larger than 3 Charcter']
     },
+    nameEN: {
+      type: String,
+      require: [true, 'A project Must Have  a Name'],
+      minlength: [3, 'A project Name must be larger than 3 Charcter']
+    },
     videos: { type: String },
     description: {
+      type: String,
+      require: [true, 'A project Must Have  a Description'],
+      minlength: [20, 'project description is too small']
+    },
+    descriptionEN: {
       type: String,
       require: [true, 'A project Must Have  a Description'],
       minlength: [20, 'project description is too small']
@@ -35,7 +46,9 @@ const projectSchema = new mongoose.Schema(
       {
         imageCover: { type: String },
         name: { type: String },
-        description: { type: String }
+        nameEN: { type: String },
+        description: { type: String },
+        descriptionEN: { type: String }
       }
     ],
     establishDate: {
@@ -44,6 +57,10 @@ const projectSchema = new mongoose.Schema(
       require: [true, 'establishing date is required']
     },
     location: {
+      type: String,
+      enum: ['مصر', 'السعودية']
+    },
+    locationEN: {
       type: String,
       enum: ['egypt', 'saudi arbia']
     },
@@ -57,7 +74,8 @@ const projectSchema = new mongoose.Schema(
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
+    Timestamp: true
   }
 );
 
@@ -80,8 +98,12 @@ module.exports = Project;
 12-test the error message in production
 13-\\projects\:id\:fieldName\:imageName //delete images---------->done
 14-dark Mode
-15-arabic &english
-16-download parsure
+15-arabic &english ------------->me&tarek
+16-download parsure ----------->donw
+17-reset password "logged out"------->done
+18-404 error page
+19-show error message
+20-search 
 
 
 
