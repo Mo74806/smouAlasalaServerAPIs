@@ -238,9 +238,9 @@ exports.updateProject = catchAsync(async (req, res, next) => {
   if (req.body.imagePlan) {
     req.body.imagePlan = [...project1.imagePlan, ...req.body.imagePlan];
   }
-
+  let project;
   if (req.files.parsure) {
-    const project = await Project.findByIdAndUpdate(
+    project = await Project.findByIdAndUpdate(
       req.params.id,
       {
         ...req.body,
@@ -252,7 +252,7 @@ exports.updateProject = catchAsync(async (req, res, next) => {
       }
     );
   } else {
-    const project = await Project.findByIdAndUpdate(
+    project = await Project.findByIdAndUpdate(
       req.params.id,
       {
         ...req.body
