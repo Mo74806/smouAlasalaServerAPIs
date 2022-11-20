@@ -1,31 +1,32 @@
 const nodemailer = require('nodemailer');
-
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
 const sendEmail = async options => {
   var transport = nodemailer.createTransport({
-    // host: 'smtp.mailtrap.io',
-    // port: 25,
-    // auth: {
-    //   user: 'b8545adabb298f',
-    //   pass: '5c5205fe568cfd'
-    // }
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: 'smtp.mailtrap.io',
+    port: 25,
     auth: {
-      user: 'mail',
-      pass: 'pass'
+      user: 'b8545adabb298f',
+      pass: '5c5205fe568cfd'
     }
+    // host: 'smtp.gmail.com',
+    // port: 465,
+    // secure: true,
+    // auth: {
+    //   user: process.env.USERMAIL,
+    //   pass: process.env.USERPASS
+    // }
   });
 
   const mailOption = {
-    // from: 'mostafa khaled<hell@smou.io>',
-    // to: options.email,
-    // subject: options.subject,
-    // text: options.message
-    from: 'm.khaled201774@gmail.com',
-    to: 'm.khaled201700@gmail.com',
+    from: 'mostafa khaled<hell@smou.io>',
+    to: options.email,
     subject: options.subject,
     text: options.message
+    // from: 'm.khaled201774@gmail.com',
+    // to: 'm.khaled201700@gmail.com',
+    // subject: options.subject,
+    // text: options.message
   };
   transport.sendMail(mailOption, function(err, data) {
     if (err) {
