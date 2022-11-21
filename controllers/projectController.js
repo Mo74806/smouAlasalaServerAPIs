@@ -39,38 +39,20 @@ var storage = multer.diskStorage({
   }
 });
 
-const upload = multer(
-  {
-    // storage: storage1
-    storage: storage
-  }
-  // {
-  //   dest: function(req, file, cb) {
-  //     cb(null, 'public/img/projects');
-  //   },
-  //   filename: function(req, file, cb) {
-  //     cb(
-  //       null,
-  //       Date.now() +
-  //         `${path.extname(file.originalname)}.${
-  //           file.originalname.split('.')[1]
-  //         }`
-  //     ); //Appending extension
-  //   }
-  // }
-  // fileFilter: multerFilter
-  // }
-);
+const upload = multer({
+  // storage: storage1
+  storage: storage
+});
 
 exports.uploadProjectImages = upload.fields([
-  { name: 'imageCover', maxCount: 10 },
-  { name: 'imageService', maxCount: 15 },
+  { name: 'imageCover', maxCount: 20 },
+  { name: 'imageService', maxCount: 20 },
   {
     name: 'unitCover',
-    maxCount: 10
+    maxCount: 20
   },
-  { name: 'imagePlan', maxCount: 15 },
-  { name: 'parsure', maxCount: 100 }
+  { name: 'imagePlan', maxCount: 20 },
+  { name: 'parsure', maxCount: 5 }
 ]);
 
 exports.handleProjectFiles = catchAsync(async (req, res, next) => {
@@ -340,12 +322,10 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
 exports.deleteImage = catchAsync(async (req, res, next) => {
   //get the project by id
   const project1 = await Project.findById(req.params.id);
-
   let images = project1[req.params.fieldName];
   let returnImages = images.filter(item => {
     if (item != req.params.imageName) return item;
   });
-  console.log(returnImages);
   project1[req.params.fieldName] = [...returnImages];
   const project = await Project.findByIdAndUpdate(
     req.params.id,

@@ -24,6 +24,8 @@ exports.getAllAppointements = catchAsync(async (req, res, next) => {
 });
 
 exports.getAppointement = catchAsync(async (req, res, next) => {
+  app.use('/static', express.static(path.join(__dirname, 'public')));
+
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement) {
     return next(new AppError('no Appointement matched this id', 404));
@@ -100,10 +102,8 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement)
     return next(new AppError('no appointement matched this id', 404));
-  // if (req.user.role != 'admin')
-  // if (req.user.id != appointement.user)
-  // return next(new AppError('you are not authorized', 302));
-
+  if (req.user.role != 'admin' || req.user.id != appointement.user)
+    return next(new AppError('you are not authorized', 302));
   //delete the reference from the user data
   const user = await User.findByIdAndUpdate(appointement.user, {
     appointements: null
@@ -166,15 +166,9 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
 });
 
 exports.verfiyLastAppointement = catchAsync(async (req, res, next) => {
-  console.log('iam here');
-  console.log(req.user._id);
   const appointement = await Appointement.findOne({ use: req.user._id });
-  console.log(appointement);
   if (!appointement) return next();
-  console.log(new Date(appointement.startDate).getTime());
-  console.log(Date.now());
   if (new Date(appointement.startDate).getTime() < Date.now()) {
-    console.log('in condition');
     const user = await User.findByIdAndUpdate(req.user._id, {
       appointements: null
     });

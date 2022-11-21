@@ -3,12 +3,10 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const AppError = require('./utils/appError');
 const RouteErrorHandling = require('./controllers/errorController');
-
 const userRouter = require('./routes/userRoutes');
 const projectRouter = require('./routes/projectRoutes');
 const appointementRouter = require('./routes/appointementRoutes');
 const contactRouter = require('./routes/contactRoutes');
-
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');

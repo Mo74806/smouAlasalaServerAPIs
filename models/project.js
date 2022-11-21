@@ -56,10 +56,7 @@ const projectSchema = new mongoose.Schema(
       validate: [validator.isDate, 'please enter a valid establish date'],
       require: [true, 'establishing date is required']
     },
-    location: {
-      type: String,
-      enum: ['مصر', 'السعودية']
-    },
+
     locationEN: {
       type: String,
       enum: ['egypt', 'saudi arbia']
@@ -93,12 +90,12 @@ module.exports = Project;
 7-put the status of the appointement
 8-make the user able to book an appointement after the passed appointements---------->done
 9-delete the appointement if the user is deleted ------------>delete
-10-upload the cv to the drive
-11-finalize auth & authrization------------>tarek,yasser
+10-upload the cv to the drive------------>done
+11-finalize auth & authrization------------>tarek,yasser(done)
 12-test the error message in production
 13-\\projects\:id\:fieldName\:imageName //delete images---------->done
 14-dark Mode
-15-arabic &english ------------->me&tarek
+15-arabic &english ------------->me&tarek(error messages)
 16-download parsure ----------->done
 17-reset password "logged out"------->done
 18-404 error page
