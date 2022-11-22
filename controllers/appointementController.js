@@ -24,8 +24,6 @@ exports.getAllAppointements = catchAsync(async (req, res, next) => {
 });
 
 exports.getAppointement = catchAsync(async (req, res, next) => {
-  app.use('/static', express.static(path.join(__dirname, 'public')));
-
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement) {
     return next(new AppError('no Appointement matched this id', 404));
@@ -102,8 +100,10 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
   const appointement = await Appointement.findById(req.params.id);
   if (!appointement)
     return next(new AppError('no appointement matched this id', 404));
-  if (req.user.role != 'admin' || req.user.id != appointement.user)
-    return next(new AppError('you are not authorized', 302));
+  // if (req.user.role != 'admin')
+  // if (req.user.id != appointement.user)
+  // return next(new AppError('you are not authorized', 302));
+
   //delete the reference from the user data
   const user = await User.findByIdAndUpdate(appointement.user, {
     appointements: null
@@ -119,7 +119,12 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
   if (Date.now() - 24 * 60 * 60 * 1000 > new Date(date).getTime()) {
-    return next(new AppError('please select a newer date time', 404));
+    console.log('here');
+    res.status(200).json({
+      status: 'fail',
+      data: null,
+      message: 'select valid date '
+    });
   }
 
   let freeHourse = [10, 11, 12, 13, 14];
@@ -133,6 +138,7 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
     'Saturday'
   ];
   var day = dayName[new Date(date).getDay()];
+  console.log(day);
   if (day == 'Friday') {
     res.status(200).json({
       status: 'success',
@@ -166,9 +172,15 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
 });
 
 exports.verfiyLastAppointement = catchAsync(async (req, res, next) => {
+  console.log('iam here');
+  console.log(req.user._id);
   const appointement = await Appointement.findOne({ use: req.user._id });
+  console.log(appointement);
   if (!appointement) return next();
+  console.log(new Date(appointement.startDate).getTime());
+  console.log(Date.now());
   if (new Date(appointement.startDate).getTime() < Date.now()) {
+    console.log('in condition');
     const user = await User.findByIdAndUpdate(req.user._id, {
       appointements: null
     });

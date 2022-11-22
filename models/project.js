@@ -95,13 +95,13 @@ module.exports = Project;
 12-test the error message in production
 13-\\projects\:id\:fieldName\:imageName //delete images---------->done
 14-dark Mode
-15-arabic &english ------------->me&tarek(error messages)
+15-arabic &english ------------->me&tarek(error messages)-------->done
 16-download parsure ----------->done
 17-reset password "logged out"------->done
 18-404 error page
 19-show error message
 20-search 
-
+21-resize image
 
 
 
