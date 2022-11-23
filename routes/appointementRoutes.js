@@ -9,6 +9,11 @@ router
     authController.protect,
     appointementController.getFreeAppointementsInDay
   );
+
+router.route('/dayAppointements/:date').get(
+  // authController.protect,
+  appointementController.getDayAppointements
+);
 router
   .route('/')
   .get(

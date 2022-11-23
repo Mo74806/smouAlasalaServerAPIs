@@ -115,6 +115,32 @@ exports.deleteAppointement = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+exports.getDayAppointements = catchAsync(async (req, res, next) => {
+  let date = req.params.date;
+  const appointements = await Appointement.find({});
+  day = new Date(date).getDate();
+  let month = new Date(date).getMonth() + 1;
+  let year = new Date(date).getFullYear();
+  console.log(date);
+
+  let newFreeHourse = appointements.filter(item => {
+    console.log(item);
+    if (
+      new Date(item.startDate).getDate() == day &&
+      new Date(item.startDate).getMonth() + 1 == month &&
+      new Date(item.startDate).getFullYear() == year
+    )
+      return item;
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      dayAppointements: newFreeHourse
+    }
+  });
+});
 //return the avaliable free apoointements in the day
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
