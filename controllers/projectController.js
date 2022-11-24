@@ -3,6 +3,8 @@ const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const multer = require('multer');
+const multer1 = require('multer');
+
 const DatauriParser = require('datauri/parser');
 const { cloudinary } = require('../utils/cloundinary');
 // const sharp = require('sharp');
@@ -30,18 +32,9 @@ const storage1 = new CloudinaryStorage({
 
 var path = require('path');
 
-var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/img/projects/');
-  },
-  filename: function(req, file, cb) {
-    cb(null, file.originalname); //Appending extension
-  }
-});
-
 const upload = multer({
-  // storage: storage1
-  storage: storage
+  storage: storage1
+  // storage: storage
 });
 
 exports.uploadProjectImages = upload.fields([
@@ -52,101 +45,125 @@ exports.uploadProjectImages = upload.fields([
     maxCount: 20
   },
   { name: 'imagePlan', maxCount: 20 },
-  { name: 'parsure', maxCount: 5 }
+  { name: 'parsure', maxCount: 2 }
+]);
+
+var storage = multer1.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'public/img/projects/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname); //Appending extension
+  }
+});
+
+const upload1 = multer1({
+  storage: storage
+  // storage: storage
+});
+
+exports.uploadProjectImages1 = upload1.fields([
+  { name: 'parsure', maxCount: 2 }
 ]);
 
 exports.handleProjectFiles = catchAsync(async (req, res, next) => {
   ///////UPLOAD ON CLOUDINARY////////////////////
   //1)imageCover
-  // if (req.files.imageCover) {
-  //   req.body.imageCover = [];
-  //   await Promise.all(
-  //     req.files.imageCover.map((file, i) => {
-  //       req.body.imageCover.push(file.path);
-  //     })
-  //   );
-  // }
+  try {
+    console.log('here');
 
-  // // 2) imageServices
-  // if (req.files.imageService) {
-  //   req.body.imageService = [];
-  //   await Promise.all(
-  //     req.files.imageService.map((file, i) => {
-  //       req.body.imageService.push(file.path;
-  //     })
-  //   );
-  // }
-  // //3)imagePlan
-  // if (req.files.imagePlan) {
-  //   req.body.imagePlan = [];
-  //   await Promise.all(
-  //     req.files.imagePlan.map(async (file, i) => {
-  //       req.body.imagePlan.push(file.path);
-  //     })
-  //   );
-  // }
-  // //4)housingUnitCoverImage
-  // if (req.files.unitCover) {
-  //   req.body.unitsCover = [];
-  //   await Promise.all(
-  //     req.files.unitCover.map(async (file, i) => {
-  //       req.body.unitsCover.push(file.path);
-  //     })
-  //   );
-  // }
+    if (req.files.imageCover) {
+      req.body.imageCover = [];
+      await Promise.all(
+        req.files.imageCover.map((file, i) => {
+          req.body.imageCover.push(file.path);
+        })
+      );
+    }
 
-  // // 5) parsure
-  // // console.log(req.files.parsure);
-  // // req.body.parsure = [];
-  // // if (req.files.parsure) req.body.parsure.push(req.files.parsure[0].path);
+    // 2) imageServices
+    if (req.files.imageService) {
+      req.body.imageService = [];
+      await Promise.all(
+        req.files.imageService.map((file, i) => {
+          req.body.imageService.push(file.path);
+        })
+      );
+    }
+    //3)imagePlan
+    if (req.files.imagePlan) {
+      req.body.imagePlan = [];
+      await Promise.all(
+        req.files.imagePlan.map(async (file, i) => {
+          req.body.imagePlan.push(file.path);
+        })
+      );
+    }
+    //4)housingUnitCoverImage
+    if (req.files.unitCover) {
+      req.body.unitsCover = [];
+      await Promise.all(
+        req.files.unitCover.map(async (file, i) => {
+          req.body.unitsCover.push(file.path);
+        })
+      );
+    }
+    next();
+  } catch (e) {
+    // 5) parsure
+    // console.log(req.files.parsure);
+    // req.body.parsure = [];
+    // if (req.files.parsure) req.body.parsure.push(req.files.parsure[0].path);
 
-  //////////////////////////////////////////////////////////////////////////////
-  ///////UPLOAD ON PUBLIC////////////////////
-  //1)imageCover
-  if (req.files.imageCover) {
-    req.body.imageCover = [];
-    await Promise.all(
-      req.files.imageCover.map((file, i) => {
-        req.body.imageCover.push(file.originalname);
-      })
-    );
+    //////////////////////////////////////////////////////////////////////////////
+    ///////UPLOAD ON PUBLIC////////////////////
+    // //1)imageCover
+    // if (req.files.imageCover) {
+    //   req.body.imageCover = [];
+    //   await Promise.all(
+    //     req.files.imageCover.map((file, i) => {
+    //       req.body.imageCover.push(file.originalname);
+    //     })
+    //   );
+    // }
+
+    // // 2) imageServices
+    // if (req.files.imageService) {
+    //   req.body.imageService = [];
+    //   await Promise.all(
+    //     req.files.imageService.map((file, i) => {
+    //       req.body.imageService.push(file.originalname);
+    //     })
+    //   );
+    // }
+    // //3)imagePlan
+    // if (req.files.imagePlan) {
+    //   req.body.imagePlan = [];
+    //   await Promise.all(
+    //     req.files.imagePlan.map(async (file, i) => {
+    //       req.body.imagePlan.push(file.originalname);
+    //     })
+    //   );
+    // }
+    // //4)housingUnitCoverImage
+    // if (req.files.unitCover) {
+    //   req.body.unitsCover = [];
+    //   await Promise.all(
+    //     req.files.unitCover.map(async (file, i) => {
+    //       req.body.unitsCover.push(file.originalname);
+    //     })
+    //   );
+    // }
+
+    // 5) parsure
+    // console.log(req.files.parsure);
+    // req.body.parsure = [];
+    // if (req.files.parsure)
+    //   req.body.parsure.push(req.files.parsure[0].originalname[0]);
+
+    console.log(e);
+    next();
   }
-
-  // 2) imageServices
-  if (req.files.imageService) {
-    req.body.imageService = [];
-    await Promise.all(
-      req.files.imageService.map((file, i) => {
-        req.body.imageService.push(file.originalname);
-      })
-    );
-  }
-  //3)imagePlan
-  if (req.files.imagePlan) {
-    req.body.imagePlan = [];
-    await Promise.all(
-      req.files.imagePlan.map(async (file, i) => {
-        req.body.imagePlan.push(file.originalname);
-      })
-    );
-  }
-  //4)housingUnitCoverImage
-  if (req.files.unitCover) {
-    req.body.unitsCover = [];
-    await Promise.all(
-      req.files.unitCover.map(async (file, i) => {
-        req.body.unitsCover.push(file.originalname);
-      })
-    );
-  }
-
-  // 5) parsure
-  // console.log(req.files.parsure);
-  // req.body.parsure = [];
-  // if (req.files.parsure)
-  //   req.body.parsure.push(req.files.parsure[0].originalname[0]);
-
-  next();
 });
 
 exports.getAllProjects = catchAsync(async (req, res, next) => {
@@ -176,6 +193,7 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
+  console.log(req.body);
   let units = req.body.unitsCover.map((item, index) => {
     return {
       name: req.body.unitName[index],
@@ -188,7 +206,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
 
   const newProject = await Project.create({
     ...req.body,
-    parsure: req.files.parsure[0].originalname,
+    // parsure: req.files.parsure[0].originalname,
+    parsure: req.files.parsure[0].path,
     housingUnits: units
   });
 
@@ -202,6 +221,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
 
 exports.updateProject = catchAsync(async (req, res, next) => {
   //get the project by id
+  console.log(req.files);
+
   const project1 = await Project.findById(req.params.id);
   //if no project
   if (!project1) return next(new AppError('no project matched this id', 404));
@@ -226,7 +247,8 @@ exports.updateProject = catchAsync(async (req, res, next) => {
       req.params.id,
       {
         ...req.body,
-        parsure: req.files.parsure[0]?.originalname
+        // parsure: req.files.parsure[0]?.originalname
+        parsure: req.files.parsure[0]?.path
       },
       {
         new: true,
