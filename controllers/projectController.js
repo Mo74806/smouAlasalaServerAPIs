@@ -6,7 +6,7 @@ const multer = require('multer');
 const multer1 = require('multer');
 
 const DatauriParser = require('datauri/parser');
-const { cloudinary } = require('../utils/cloundinary');
+const { cloudinary } = require('../utils/cloudinary');
 // const sharp = require('sharp');
 // const fs = require('fs');
 // const path = require('path');
