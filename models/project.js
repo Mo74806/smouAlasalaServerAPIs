@@ -82,24 +82,24 @@ module.exports = Project;
 /*
 
 1-create project  --------------------->done 
-2-resize images from tarek code ----------->done
+2-resize images from tarek code ----------->doneX
 3-add phone in user schema------------->done
 4-signup with google ------------------>done
 5-uploaad images on cloud ------------------->done
 6-schema validation /joi validation---------->done
-7-put the status of the appointement
+7-put the status of the appointement----------->done
 8-make the user able to book an appointement after the passed appointements---------->done
 9-delete the appointement if the user is deleted ------------>delete
 10-upload the cv to the drive------------>done
 11-finalize auth & authrization------------>tarek,yasser(done)
 12-test the error message in production
 13-\\projects\:id\:fieldName\:imageName //delete images---------->done
-14-dark Mode
+14-dark Mode------------->tarek
 15-arabic &english ------------->me&tarek(error messages)-------->done
 16-download parsure ----------->done
 17-reset password "logged out"------->done
 18-404 error page
-19-show error message
+19-show error message---------->done
 20-search 
 21-resize image
 

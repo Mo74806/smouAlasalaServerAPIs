@@ -10,15 +10,14 @@ router
     appointementController.getFreeAppointementsInDay
   );
 
-router.route('/dayAppointements/:date').get(
-  // authController.protect,
-  appointementController.getDayAppointements
-);
+router
+  .route('/dayAppointements/:date')
+  .get(authController.protect, appointementController.getDayAppointements);
 router
   .route('/')
   .get(
-    // authController.protect,
-    // authController.restrictTo('admin'),
+    authController.protect,
+    authController.restrictTo('admin'),
     appointementController.getAllAppointements
   )
   .post(
@@ -29,21 +28,19 @@ router
 
 router
   .route('/:id')
-  .get(
-    // authController.protect,
-    appointementController.getAppointement
-  )
+  .get(authController.protect, appointementController.getAppointement)
   .patch(
-    // authController.protect,
+    authController.protect,
+    authController.restrictTo('admin'),
     appointementController.updateAppointement
   )
-  .delete(
-    // authController.protect,
-    appointementController.deleteAppointement
+  .delete(authController.protect, appointementController.deleteAppointement);
+router
+  .route('/setConfirmed/:id')
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin'),
+    appointementController.setAppointementConfirmed
   );
-router.route('/setConfirmed/:id').patch(
-  // authController.protect,
-  appointementController.setAppointementConfirmed
-);
 
 module.exports = router;

@@ -7,8 +7,8 @@ const router = express.Router();
 router
   .route('/')
   .get(
-    // authController.protect,
-    // authController.restrictTo('admin'),
+    authController.protect,
+    authController.restrictTo('admin'),
     contactController.getAllContacts
   )
   .post(contactController.createContact);
@@ -18,8 +18,8 @@ router
   .get(contactController.getContact)
   .patch(contactController.updateContact)
   .delete(
-    // authController.protect,
-    // authController.restrictTo('admin'),
+    authController.protect,
+    authController.restrictTo('admin'),
     contactController.deleteContact
   );
 
