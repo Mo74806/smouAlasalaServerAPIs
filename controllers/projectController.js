@@ -344,10 +344,12 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
 exports.deleteImage = catchAsync(async (req, res, next) => {
   //get the project by id
   const project1 = await Project.findById(req.params.id);
+  console.log(project1);
   let images = project1[req.params.fieldName];
   let returnImages = images.filter(item => {
-    if (item != req.params.imageName) return item;
+    if (item != req.body.imageName) return item;
   });
+  console.log(images);
   project1[req.params.fieldName] = [...returnImages];
   const project = await Project.findByIdAndUpdate(
     req.params.id,

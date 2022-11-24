@@ -15,7 +15,7 @@ router
   );
 
 router
-  .route('/removeImage/:id/:fieldName/:imageName')
+  .route('/removeImage/:id/:fieldName')
   .patch(
     authController.protect,
     authController.restrictTo('admin'),
