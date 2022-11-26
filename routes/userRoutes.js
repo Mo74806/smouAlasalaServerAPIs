@@ -33,11 +33,7 @@ router
 
 router
   .route('/:id')
-  .get(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.getUser
-  )
+  .get(authController.protect, userController.getUser)
   .patch(
     authController.protect,
     authController.restrictTo('admin'),

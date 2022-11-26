@@ -35,6 +35,20 @@ exports.getAppointement = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+exports.getAppointementUser = catchAsync(async (req, res, next) => {
+  const appointement = await Appointement.findOne({ user: req.params.id });
+  if (!appointement) {
+    return next(new AppError('no Appointement matched this id', 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      appointement
+    }
+  });
+});
+
 exports.createAppointement = catchAsync(async (req, res, next) => {
   const newAppointement = await Appointement.create({
     ...req.body,
@@ -122,10 +136,8 @@ exports.getDayAppointements = catchAsync(async (req, res, next) => {
   day = new Date(date).getDate();
   let month = new Date(date).getMonth() + 1;
   let year = new Date(date).getFullYear();
-  console.log(date);
 
   let newFreeHourse = appointements.filter(item => {
-    console.log(item);
     if (
       new Date(item.startDate).getDate() == day &&
       new Date(item.startDate).getMonth() + 1 == month &&
@@ -145,7 +157,6 @@ exports.getDayAppointements = catchAsync(async (req, res, next) => {
 exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
   let date = req.params.date;
   if (Date.now() - 24 * 60 * 60 * 1000 > new Date(date).getTime()) {
-    console.log('here');
     res.status(200).json({
       status: 'fail',
       data: null,
@@ -164,7 +175,6 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
     'Saturday'
   ];
   var day = dayName[new Date(date).getDay()];
-  console.log(day);
   if (day == 'Friday') {
     res.status(200).json({
       status: 'success',
@@ -198,15 +208,9 @@ exports.getFreeAppointementsInDay = catchAsync(async (req, res, next) => {
 });
 
 exports.verfiyLastAppointement = catchAsync(async (req, res, next) => {
-  console.log('iam here');
-  console.log(req.user._id);
   const appointement = await Appointement.findOne({ use: req.user._id });
-  console.log(appointement);
   if (!appointement) return next();
-  console.log(new Date(appointement.startDate).getTime());
-  console.log(Date.now());
   if (new Date(appointement.startDate).getTime() < Date.now()) {
-    console.log('in condition');
     const user = await User.findByIdAndUpdate(req.user._id, {
       appointements: null
     });

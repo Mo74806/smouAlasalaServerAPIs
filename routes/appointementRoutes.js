@@ -11,6 +11,10 @@ router
   );
 
 router
+  .route('/user/:id')
+  .get(authController.protect, appointementController.getAppointementUser);
+
+router
   .route('/dayAppointements/:date')
   .get(authController.protect, appointementController.getDayAppointements);
 router

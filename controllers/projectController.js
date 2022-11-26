@@ -70,8 +70,6 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
   ///////UPLOAD ON CLOUDINARY////////////////////
   //1)imageCover
   try {
-    console.log('here');
-
     if (req.files.imageCover) {
       req.body.imageCover = [];
       await Promise.all(
@@ -110,57 +108,6 @@ exports.handleProjectFiles = catchAsync(async (req, res, next) => {
     }
     next();
   } catch (e) {
-    // 5) parsure
-    // console.log(req.files.parsure);
-    // req.body.parsure = [];
-    // if (req.files.parsure) req.body.parsure.push(req.files.parsure[0].path);
-
-    //////////////////////////////////////////////////////////////////////////////
-    ///////UPLOAD ON PUBLIC////////////////////
-    // //1)imageCover
-    // if (req.files.imageCover) {
-    //   req.body.imageCover = [];
-    //   await Promise.all(
-    //     req.files.imageCover.map((file, i) => {
-    //       req.body.imageCover.push(file.originalname);
-    //     })
-    //   );
-    // }
-
-    // // 2) imageServices
-    // if (req.files.imageService) {
-    //   req.body.imageService = [];
-    //   await Promise.all(
-    //     req.files.imageService.map((file, i) => {
-    //       req.body.imageService.push(file.originalname);
-    //     })
-    //   );
-    // }
-    // //3)imagePlan
-    // if (req.files.imagePlan) {
-    //   req.body.imagePlan = [];
-    //   await Promise.all(
-    //     req.files.imagePlan.map(async (file, i) => {
-    //       req.body.imagePlan.push(file.originalname);
-    //     })
-    //   );
-    // }
-    // //4)housingUnitCoverImage
-    // if (req.files.unitCover) {
-    //   req.body.unitsCover = [];
-    //   await Promise.all(
-    //     req.files.unitCover.map(async (file, i) => {
-    //       req.body.unitsCover.push(file.originalname);
-    //     })
-    //   );
-    // }
-
-    // 5) parsure
-    // console.log(req.files.parsure);
-    // req.body.parsure = [];
-    // if (req.files.parsure)
-    //   req.body.parsure.push(req.files.parsure[0].originalname[0]);
-
     console.log(e);
     next();
   }
@@ -193,7 +140,6 @@ exports.getProject = catchAsync(async (req, res, next) => {
 });
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   let units = req.body.unitsCover.map((item, index) => {
     return {
       name: req.body.unitName[index],
@@ -221,7 +167,6 @@ exports.createProject = catchAsync(async (req, res, next) => {
 
 exports.updateProject = catchAsync(async (req, res, next) => {
   //get the project by id
-  console.log(req.files);
 
   const project1 = await Project.findById(req.params.id);
   //if no project
@@ -344,12 +289,10 @@ exports.updateUnit = catchAsync(async (req, res, next) => {
 exports.deleteImage = catchAsync(async (req, res, next) => {
   //get the project by id
   const project1 = await Project.findById(req.params.id);
-  console.log(project1);
   let images = project1[req.params.fieldName];
   let returnImages = images.filter(item => {
     if (item != req.body.imageName) return item;
   });
-  console.log(images);
   project1[req.params.fieldName] = [...returnImages];
   const project = await Project.findByIdAndUpdate(
     req.params.id,
